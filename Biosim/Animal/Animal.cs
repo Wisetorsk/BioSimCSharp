@@ -15,7 +15,7 @@ namespace Biosim.Animal
         public double Weight
         {
             get { return weight; }
-            set { weight = (value < 0) ? Parameters.Parameters.BaseWeight : value; }
+            set { weight = (value < 0) ? Biosim.Parameters.UniversalParameters.BaseWeight : value; }
         }
 
         public int Age
