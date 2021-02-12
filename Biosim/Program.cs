@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Biosim.Animal;
-using Biosim.Enviroment;
+using Biosim.Animals;
+using Biosim.Land;
 using Biosim.Parameters;
 
 namespace Biosim
@@ -13,15 +13,22 @@ namespace Biosim
     {
         static void Main(string[] args)
         {
-            Animal.Animal test1 = new Animal.Animal();
-            test1.Pos.x = 100;
-            Console.WriteLine(test1.Pos.x);
-
-            Herbivore testHerbivore = new Herbivore();
-            testHerbivore.Pos.y = 123;
-            Console.WriteLine(testHerbivore.Pos.y);
 
 
+            Herbivore testHerbivore = new Herbivore { Age = 10, Pos = new Position { x= 50, y=30} };
+            Carnivore testCarnivore = new Carnivore { Pos = new Position { x = 50, y = 30 } };
+            Console.WriteLine(testHerbivore);
+            //Console.WriteLine(testCarnivore);
+            testHerbivore.Weight = 15;
+            Console.WriteLine(testHerbivore);
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+            Console.WriteLine("Press any key top show island");
+            Console.ReadKey();
+            Island testIsland = new Island();
+            testIsland.Display();
             Console.ReadLine(); // Halts end of exec
 
         }

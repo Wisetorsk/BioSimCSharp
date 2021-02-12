@@ -33,8 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,8 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animal\Animal.cs" />
-    <Compile Include="Enviroment\Enviroment.cs" />
+    <Compile Include="Animals\Animal.cs" />
+    <Compile Include="Animals\IAnimal.cs" />
+    <Compile Include="Land\Enviroment.cs" />
+    <Compile Include="Land\IEnviroment.cs" />
+    <Compile Include="Land\Island.cs" />
+    <Compile Include="Parameters\DefaultParameters.cs" />
+    <Compile Include="Parameters\Directions.cs" />
     <Compile Include="Parameters\Parameters.cs" />
     <Compile Include="Parameters\Position.cs" />
     <Compile Include="Program.cs" />
@@ -52,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
