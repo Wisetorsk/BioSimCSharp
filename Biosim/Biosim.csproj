@@ -55,6 +55,7 @@
     <Compile Include="Land\Island.cs" />
     <Compile Include="Parameters\DefaultParameters.cs" />
     <Compile Include="Parameters\Directions.cs" />
+    <Compile Include="Parameters\IAnimalParams.cs" />
     <Compile Include="Parameters\Parameters.cs" />
     <Compile Include="Parameters\Position.cs" />
     <Compile Include="Program.cs" />

@@ -16,6 +16,9 @@ namespace Biosim.Land
         public List<Herbivore> Herbivores { get; set; }
         public List<Carnivore> Carnivores { get; set; }
         public double Food { get; set; }
+        public int NumberOfHerbivores => Herbivores.Count();
+        public int NumberOfCarnivores => Carnivores.Count();
+        public int TotalIndividuals => NumberOfCarnivores + NumberOfHerbivores;
 
         // Constructor & Overloads
 
@@ -52,6 +55,25 @@ namespace Biosim.Land
         public void WeightLossCycle()
         {
             throw new NotImplementedException();
+        }
+
+        public void RemoveDeadIndividuals()
+        {
+            foreach (var herb in Herbivores)
+            {
+                if (!herb.IsAlive)
+                {
+                    Herbivores.Remove(herb);
+                }
+            }
+
+            foreach (var carn in Carnivores)
+            {
+                if (!carn.IsAlive)
+                {
+                    Carnivores.Remove(carn);
+                }
+            }
         }
 
         // Methods
