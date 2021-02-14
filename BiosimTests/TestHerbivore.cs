@@ -48,17 +48,17 @@ namespace BiosimTests
             Assert.Equal(initialWeight, endWeight);
         }
 
+        [Fact] //fct shortcut
+        public void HerbivoreGiveBirthTest()
+        {
+            //Assert.method(logical);
+        }
+
         [Fact]
         public void HerbivoreMoveTest()
         {
             // Set Mu parameter so that berbiovre must move. 
             Herbivore testHerb = new Herbivore();
-        }
-
-        [Fact]
-        public void HerbivoreGivesBirthTest()
-        {
-
         }
 
         [Fact]
