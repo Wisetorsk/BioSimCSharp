@@ -1,6 +1,6 @@
 ﻿using System;
 using Xunit;
-using Biosim.Land;
+using Biosim.Animals;
 
 
 namespace BiosimTests

@@ -18,6 +18,7 @@ namespace Biosim.Land
         void CarnivoreFeedingCycle();
         void DeathCycle();
         void BirthCycle();
+        int ResetGivenBirthParameter(); //Returns the number of births in a given cycle
         void AgeCycle();
         void WeightLossCycle();
         void RemoveDeadIndividuals();

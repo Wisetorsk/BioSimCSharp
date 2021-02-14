@@ -54,5 +54,18 @@ namespace BiosimTests
             // Set Mu parameter so that berbiovre must move. 
             Herbivore testHerb = new Herbivore();
         }
+
+        [Fact]
+        public void HerbivoreGivesBirthTest()
+        {
+
+        }
+
+        [Fact]
+        public void SetWeightTest()
+        {
+            Herbivore testHerb = new Herbivore { Weight = 10 };
+            Assert.Equal(10, testHerb.Weight);
+        }
     }
 }

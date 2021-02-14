@@ -11,6 +11,7 @@ namespace Biosim.Animals
         double Qneg { get; set; }
         IAnimalParams Params { get; set; }
         bool IsAlive { get; set; }
+        bool GivenBirth { get; set; }
 
         //Directions Migrate(Directions[] dir);
         Animal Birth(int sameSpeciesInCell);

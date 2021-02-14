@@ -13,6 +13,7 @@
         public double PhiWeight { get; set; } = 0.1;
         public double Mu { get; set; } = 0.25;
         public double Gamma { get; set; } = 0.2;
+        public double Zeta { get; set; } = 3.5;
         public double Xi { get; set; } = 1.2;
         public double Omega { get; set; } = 0.4;
         public double F { get; set; } = 10.0;
@@ -30,6 +31,7 @@
         public double PhiWeight { get; set; } = 0.4;
         public double Mu { get; set; } = 0.4;
         public double Gamma { get; set; } = 0.8;
+        public double Zeta { get; set; } = 3.5;
         public double Xi { get; set; } = 1.1;
         public double Omega { get; set; } = 0.9;
         public double F { get; set; } = 50.0;

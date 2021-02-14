@@ -33,6 +33,7 @@ namespace Biosim.Animals
         public virtual double Qneg { get; set; }
         public virtual IAnimalParams Params { get; set; }
         public bool IsAlive { get; set; } = true;
+        public bool GivenBirth { get; set; } = false;
 
         // Constructors & Overloads
 
@@ -58,7 +59,34 @@ namespace Biosim.Animals
 
         public Animal Birth(int sameSpeciesInCell)
         {
-            throw new NotImplementedException();
+            if (GivenBirth) return null;
+            double probability;
+            if (Weight < (Params.Zeta * (Params.BirthWeight + Params.BirthSigma)))
+            {
+                probability = 0.0;
+            }else
+            {
+                probability = Params.Gamma * Fitness * (sameSpeciesInCell - 1);
+                probability = (probability > 1) ? 1 : probability;
+            }
+
+            if (probability > rng.NextDouble())
+            {
+                Animal newborn;
+                if (this.GetType().Name == "Herbivore")
+                {
+                    newborn = new Herbivore();
+                } else
+                {
+                    newborn = new Carnivore();
+                }
+                double bWeight = newborn.Weight;
+                if (bWeight >= Weight || bWeight <= 0) return null;
+                Weight -= Params.Xi * bWeight;
+                GivenBirth = true;
+                return newborn;
+            }
+            return null;
         }
 
         public bool Death()
@@ -127,7 +155,28 @@ namespace Biosim.Animals
         {
             // Go through all Herbivores one by one, killing to reach Params.F. 
             // Check if the herbivore is alive with herb.IsAlive
-            return true;
+            double eaten = 0;
+            foreach (var herb in herbivores)
+            {
+                if (eaten >= Params.F) return true; // Animal is full
+                if (Fitness <= herb.Fitness) continue; // Cannot kill animal, try the next one
+                if (0 < Fitness - herb.Fitness && Fitness - herb.Fitness < Params.DeltaPhiMax)
+                { // Try to kill and eat
+                    if ((Fitness - herb.Fitness)/Params.DeltaPhiMax > rng.NextDouble())
+                    {
+                        eaten += herb.Weight;
+                        herb.IsAlive = false;
+                    } else
+                    {
+                        continue; // Fails to kill animal, try the next one
+                    }
+                } else
+                { // Kill it and eat
+                    eaten += herb.Weight;
+                    herb.IsAlive = false;
+                }
+            }
+            return false; // Animal is still hungry
         }
     }
 
