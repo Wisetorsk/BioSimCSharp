@@ -12,10 +12,11 @@ namespace Biosim.Animals
         IAnimalParams Params { get; set; }
         bool IsAlive { get; set; }
         bool GivenBirth { get; set; }
+        bool Migrated { get; set; }
 
         //Directions Migrate(Directions[] dir);
         Animal Birth(int sameSpeciesInCell);
-        bool Death();
+        void Death();
         void UpdateWeight(); //Lose weight
         void GrowOlder(); // Increment Age
         bool Kill();

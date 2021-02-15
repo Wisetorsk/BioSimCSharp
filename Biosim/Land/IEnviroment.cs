@@ -20,6 +20,7 @@ namespace Biosim.Land
         void BirthCycle();
         void GrowFood();
         int ResetGivenBirthParameter(); //Returns the number of births in a given cycle
+        int ResetMigrationParameter();
         void AgeCycle();
         void WeightLossCycle();
         void RemoveDeadIndividuals();

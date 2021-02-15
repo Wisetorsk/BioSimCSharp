@@ -87,6 +87,11 @@ namespace Biosim.Land
             throw new NotImplementedException();
         }
 
+        public int ResetMigrationParameter()
+        {
+            throw new NotImplementedException();
+        }
+
         // Methods
     }
 

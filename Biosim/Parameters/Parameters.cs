@@ -1,4 +1,6 @@
-﻿namespace Biosim.Parameters
+﻿using System;
+
+namespace Biosim.Parameters
 {
 
     public class HerbivoreParams : IAnimalParams
@@ -17,6 +19,7 @@
         public double Xi { get; set; } = 1.2;
         public double Omega { get; set; } = 0.4;
         public double F { get; set; } = 10.0;
+        public double DeltaPhiMax { get => throw new Exception("NOT AVAILABLE FOR HERBIVORES"); set => throw new Exception("NOT AVAILABLE FOR HERBIVORES"); }
     }
 
     public class CarnivoreParams : IAnimalParams

@@ -34,21 +34,23 @@ namespace Biosim.Animals
         public virtual IAnimalParams Params { get; set; }
         public bool IsAlive { get; set; } = true;
         public bool GivenBirth { get; set; } = false;
+        public bool Migrated { get; set; } = false;
 
         // Constructors & Overloads
 
-        public Animal(Random rng)
+        public Animal(Random _rng)
         {
-            rng = rng;
+            rng = _rng;
             Age = 0;
-            Console.WriteLine(rng.NextDouble());
+            //Console.WriteLine(rng.NextDouble());
         }
 
         public Directions? Migrate(Directions[] dir)
         {
             // The animal gets a set of directions it is allowed to move to (based on the passable attribute passed in from the main controller (island)
-            if (this.Fitness * Params.Mu > rng.NextDouble())
+            if (Fitness * Params.Mu > rng.NextDouble())
             {
+                Migrated = true;
                 return dir[rng.Next(dir.Length)];
             }
             else
@@ -65,7 +67,7 @@ namespace Biosim.Animals
             if (Weight < (Params.Zeta * (Params.BirthWeight + Params.BirthSigma)))
             {
                 probability = 0.0;
-            }else
+            } else
             {
                 probability = Params.Gamma * Fitness * (sameSpeciesInCell - 1);
                 probability = (probability > 1) ? 1 : probability;
@@ -90,9 +92,9 @@ namespace Biosim.Animals
             return null;
         }
 
-        public bool Death()
+        public void Death()
         {
-            return (rng.NextDouble() < Params.Omega * (1 - Fitness));
+            IsAlive = (rng.NextDouble() > Params.Omega * (1 - Fitness));
         }
 
         public void UpdateWeight()
@@ -123,11 +125,18 @@ namespace Biosim.Animals
 
     public class Herbivore : Animal
     {
-        public new HerbivoreParams Params = new HerbivoreParams();
+        
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Herbivore(Random rng) : base(rng)
+        public Herbivore(Random rng, IAnimalParams customParameters = null) : base(rng)
         {
+            if (customParameters is null)
+            {
+                Params = new HerbivoreParams();
+            } else
+            {
+                Params = customParameters;
+            }
             var norm = new MathNet.Numerics.Distributions.Normal(Params.BirthWeight, Params.BirthSigma);
             Weight = norm.Sample();
         }
@@ -143,11 +152,19 @@ namespace Biosim.Animals
 
     public class Carnivore : Animal
     {
-        public new CarnivoreParams Params = new CarnivoreParams();
+        
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Carnivore(Random rng) : base(rng)
+        public Carnivore(Random rng, IAnimalParams customParameters = null) : base(rng)
         {
+            if (customParameters is null)
+            {
+                Params = new CarnivoreParams();
+            }
+            else
+            {
+                Params = customParameters;
+            }
             var norm = new MathNet.Numerics.Distributions.Normal(Params.BirthWeight, Params.BirthSigma);
             Weight = norm.Sample();
         }
@@ -160,6 +177,7 @@ namespace Biosim.Animals
             foreach (var herb in herbivores)
             {
                 if (eaten >= Params.F) return true; // Animal is full
+                if (!herb.IsAlive) continue; // Animal is already dead
                 if (Fitness <= herb.Fitness) continue; // Cannot kill animal, try the next one
                 if (0 < Fitness - herb.Fitness && Fitness - herb.Fitness < Params.DeltaPhiMax)
                 { // Try to kill and eat
@@ -167,7 +185,7 @@ namespace Biosim.Animals
                     {
                         eaten += herb.Weight;
                         Weight += herb.Weight * Params.Beta;
-                        herb.IsAlive = false;
+                        herb.Kill();
                     } else
                     {
                         continue; // Fails to kill animal, try the next one
@@ -176,7 +194,7 @@ namespace Biosim.Animals
                 { // Kill it and eat
                     eaten += herb.Weight;
                     Weight += herb.Weight * Params.Beta;
-                    herb.IsAlive = false;
+                    herb.Kill();
                 }
             }
             

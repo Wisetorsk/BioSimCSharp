@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 using Biosim.Animals;
 using Biosim.Parameters;
+using System.Collections.Generic;
 
 namespace BiosimTests
 {
@@ -52,11 +54,26 @@ namespace BiosimTests
         [Fact] //fct shortcut
         public void HerbivoreGiveBirthTest()
         {
-            //Assert.method(logical);
+            /*Set Weight and param gamme sufficiently high such that birth will succeed
+             Check if Given birth is set to true
+             Check that the offspring is of the right type
+            Assert that the weight of mother reduces after birth
+            */
+            var testHerb = new Herbivore(new Random()) { Weight = 150 };
+            Assert.False(testHerb.GivenBirth);
+            testHerb.Params.Gamma = 10;
+            var result = testHerb.Birth(10);
+            Assert.NotNull(result);
+            Assert.True(result.GetType().Name == "Herbivore");
+            Assert.True(testHerb.GivenBirth);
+            Assert.True(testHerb.Weight < 150);
+            Assert.True(result != testHerb);
         }
 
+
+
         [Fact]
-        public void HerbivoreMoveTest()
+        public void HerbivoreMoveNotNullTest()
         {
             // Set Mu parameter so that berbiovre must move. 
             Directions[] allDir = new Directions[] { Directions.Up, Directions.Left, Directions.Right, Directions.Down};
@@ -64,14 +81,102 @@ namespace BiosimTests
             Directions[] leftRight = new Directions[] { Directions.Left, Directions.Right };
             Directions[] onlyOne = new Directions[] { Directions.Left };
             Herbivore testHerb = new Herbivore(new Random()) { Weight=150, Age=5 };
-            testHerb.Migrate(allDir);
+            testHerb.Params.Mu = 100; // Effective value of Fitness will be ~0.99, setting Mu to a stupid high value will ensure that the rng pull always succeeds.
+            Directions? result = testHerb.Migrate(allDir);
+            Directions? left = testHerb.Migrate(onlyOne);
+            Assert.NotNull(result);
+            Assert.NotNull(left);
+            Assert.Equal(Directions.Left, left);
         }
 
         [Fact]
-        public void SetWeightTest()
+        public void HerbivoreSetWeightTest()
         {
             Herbivore testHerb = new Herbivore(new Random()) { Weight = 10 };
             Assert.Equal(10, testHerb.Weight);
         }
+
+
+        [Fact]
+        public void HerbivoreGrowsOlderTest()
+        {
+            /*Description*/
+            var testHerb = new Herbivore(new Random());
+            Assert.Equal(0, testHerb.Age);
+            testHerb.GrowOlder();
+            Assert.Equal(1, testHerb.Age);
+        }
+
+
+        [Fact]
+        public void HerbivoreDiesTest()
+        {
+            /*Check to confirm death when fitness is low*/
+            var rng = new Random();
+            List<bool> results = new List<bool>();
+            for (int i = 0; i < 10000; i++)
+            {
+                var testHerbivore = new Herbivore(rng) { Age = 60, Weight = 1 }; // Herbivore with low fitness
+                testHerbivore.Params.Omega = 1; // Omega = 1 removes the preset amount of survivals
+                testHerbivore.Death();
+                results.Add(testHerbivore.IsAlive);
+            }
+            var dead = results.Where(i => !i).Count() / (double)results.Count() * 100.0;
+            Assert.True(dead > 99); // More than 99% of all individuals die
+        }
+
+
+        [Fact]
+        public void HerbivoreSurvivesTest()
+        {
+            var rng = new Random();
+            List<bool> results = new List<bool>();
+            for (int i = 0; i < 10000; i++)
+            {
+                var testHerbivore = new Herbivore(rng) { Age = 5, Weight = 100 }; // Herbivore with high fitness
+                testHerbivore.Params.Omega = 1;
+                testHerbivore.Death();
+                results.Add(testHerbivore.IsAlive);
+            }
+            var dead = results.Where(i => !i).Count()/(double)results.Count()*100.0;
+            Assert.True(dead < 1); // Less than 1% of all individuals die
+        }
+
+
+        [Fact]
+        public void HerbivoreLosesWeightTest()
+        {
+            /*Description*/
+            var rng = new Random();
+            var testHerb = new Herbivore(rng);
+            var initialW = testHerb.Weight;
+            testHerb.UpdateWeight();
+            Assert.True(initialW > testHerb.Weight);
+        }
+
+
+        [Fact]
+        public void HerbivoreKilledTest()
+        {
+            var rng = new Random();
+            var testHerb = new Herbivore(rng);
+            Assert.True(testHerb.IsAlive);
+            testHerb.Kill();
+            Assert.False(testHerb.IsAlive);
+        }
+
+
+        [Fact]
+        public void HerbivoreAlreadyDeadTest()
+        {
+            // Check if IsAlive is set properly, or if it flips
+            var rng = new Random();
+            var testHerb = new Herbivore(rng);
+            testHerb.IsAlive = false;
+            testHerb.Kill();
+            Assert.False(testHerb.IsAlive);
+
+        }
+
     }
 }
