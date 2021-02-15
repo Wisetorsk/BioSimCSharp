@@ -8,6 +8,7 @@ namespace Biosim.Simulation
 {
     class LogWriter
     {
-
+        /*
+         Collects all data and writes it to csv or visualises*/
     }
 }

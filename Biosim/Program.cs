@@ -13,7 +13,6 @@ namespace Biosim
     {
         static void Main(string[] args)
         {
-            //testNewMethod();
             //tNewMethod();
             var rng = new Random();
             //testDeaths(rng);
@@ -52,25 +51,6 @@ namespace Biosim
             animals[1].Params.Mu = 1;
             animals[1].Migrate(new Directions[] { Directions.Down, Directions.Up, Directions.Left, Directions.Right });
             Console.ReadLine();
-        }
-
-        private static void testNewMethod()
-        {
-            Herbivore testHerbivore = new Herbivore(new Random()) { Age = 10, Pos = new Position { x = 50, y = 30 } };
-            Carnivore testCarnivore = new Carnivore(new Random()) { Pos = new Position { x = 50, y = 30 } };
-            Console.WriteLine(testHerbivore);
-            //Console.WriteLine(testCarnivore);
-            testHerbivore.Weight = 15;
-            Console.WriteLine(testHerbivore);
-            Console.WriteLine();
-            Console.WriteLine();
-
-
-            Console.WriteLine("Press any key top show island");
-            Console.ReadKey();
-            Island testIsland = new Island();
-            testIsland.Display();
-            Console.ReadLine(); // Halts end of exec
         }
     }
 }
