@@ -52,7 +52,6 @@
     <Compile Include="Animals\IAnimal.cs" />
     <Compile Include="Land\Enviroment.cs" />
     <Compile Include="Land\IEnviroment.cs" />
-    <Compile Include="Land\Island.cs" />
     <Compile Include="Parameters\DefaultParameters.cs" />
     <Compile Include="Parameters\Directions.cs" />
     <Compile Include="Parameters\IAnimalParams.cs" />
