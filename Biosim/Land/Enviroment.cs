@@ -19,6 +19,7 @@ namespace Biosim.Land
         public int NumberOfHerbivores => Herbivores.Count();
         public int NumberOfCarnivores => Carnivores.Count();
         public int TotalIndividuals => NumberOfCarnivores + NumberOfHerbivores;
+        
 
         // Constructor & Overloads
 
@@ -74,6 +75,16 @@ namespace Biosim.Land
                     Carnivores.Remove(carn);
                 }
             }
+        }
+
+        public int ResetGivenBirthParameter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GrowFood()
+        {
+            throw new NotImplementedException();
         }
 
         // Methods

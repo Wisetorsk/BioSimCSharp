@@ -37,10 +37,11 @@ namespace Biosim.Animals
 
         // Constructors & Overloads
 
-        public Animal()
+        public Animal(Random rng)
         {
-            rng = new Random();
+            rng = rng;
             Age = 0;
+            Console.WriteLine(rng.NextDouble());
         }
 
         public Directions? Migrate(Directions[] dir)
@@ -75,10 +76,10 @@ namespace Biosim.Animals
                 Animal newborn;
                 if (this.GetType().Name == "Herbivore")
                 {
-                    newborn = new Herbivore();
+                    newborn = new Herbivore(rng);
                 } else
                 {
-                    newborn = new Carnivore();
+                    newborn = new Carnivore(rng);
                 }
                 double bWeight = newborn.Weight;
                 if (bWeight >= Weight || bWeight <= 0) return null;
@@ -125,7 +126,7 @@ namespace Biosim.Animals
         public new HerbivoreParams Params = new HerbivoreParams();
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Herbivore() : base()
+        public Herbivore(Random rng) : base(rng)
         {
             var norm = new MathNet.Numerics.Distributions.Normal(Params.BirthWeight, Params.BirthSigma);
             Weight = norm.Sample();
@@ -145,7 +146,7 @@ namespace Biosim.Animals
         public new CarnivoreParams Params = new CarnivoreParams();
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Carnivore() : base()
+        public Carnivore(Random rng) : base(rng)
         {
             var norm = new MathNet.Numerics.Distributions.Normal(Params.BirthWeight, Params.BirthSigma);
             Weight = norm.Sample();
@@ -165,6 +166,7 @@ namespace Biosim.Animals
                     if ((Fitness - herb.Fitness)/Params.DeltaPhiMax > rng.NextDouble())
                     {
                         eaten += herb.Weight;
+                        Weight += herb.Weight * Params.Beta;
                         herb.IsAlive = false;
                     } else
                     {
@@ -173,9 +175,11 @@ namespace Biosim.Animals
                 } else
                 { // Kill it and eat
                     eaten += herb.Weight;
+                    Weight += herb.Weight * Params.Beta;
                     herb.IsAlive = false;
                 }
             }
+            
             return false; // Animal is still hungry
         }
     }
