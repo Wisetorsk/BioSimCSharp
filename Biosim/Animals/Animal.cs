@@ -169,14 +169,15 @@ namespace Biosim.Animals
             Weight = norm.Sample();
         }
 
-        public bool Feed(List<Herbivore> herbivores)
+        public void Feed(List<Herbivore> herbivores)
         {
             // Go through all Herbivores one by one, killing to reach Params.F. 
             // Check if the herbivore is alive with herb.IsAlive
             double eaten = 0;
             foreach (var herb in herbivores)
             {
-                if (eaten >= Params.F) return true; // Animal is full
+                Console.WriteLine($"Self Fitness: {Fitness}\t Herb fitness: {herb.Fitness}");
+                if (eaten >= Params.F) break; // Animal is full
                 if (!herb.IsAlive) continue; // Animal is already dead
                 if (Fitness <= herb.Fitness) continue; // Cannot kill animal, try the next one
                 if (0 < Fitness - herb.Fitness && Fitness - herb.Fitness < Params.DeltaPhiMax)
@@ -197,8 +198,6 @@ namespace Biosim.Animals
                     herb.Kill();
                 }
             }
-            
-            return false; // Animal is still hungry
         }
     }
 

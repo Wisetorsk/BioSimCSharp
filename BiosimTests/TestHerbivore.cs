@@ -178,5 +178,19 @@ namespace BiosimTests
 
         }
 
+
+        [Fact]
+        public void FeedingUpdatesFitnessTest()
+        {
+            var rng = new Random();
+            var testHerb = new Herbivore(rng) { Weight = 5, Age=50 };
+            var initialF = testHerb.Fitness;
+            var food = 100.0;
+            testHerb.Feed(food);
+            var endF = testHerb.Fitness;
+            Assert.True(initialF < endF);
+        }
+
+
     }
 }

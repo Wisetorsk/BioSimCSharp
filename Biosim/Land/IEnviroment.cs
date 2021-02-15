@@ -1,4 +1,6 @@
 ﻿using Biosim.Animals;
+using Biosim.Parameters;
+using Biosim.Land;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +9,7 @@ namespace Biosim.Land
     public interface IEnviroment
     {
         List<Carnivore> Carnivores { get; set; }
+        Position Pos { get; set; }
         double Food { get; set; }
         List<Herbivore> Herbivores { get; set; }
         bool Passable { get; set; }
