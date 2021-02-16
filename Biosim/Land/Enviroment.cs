@@ -164,6 +164,8 @@ namespace Biosim.Land
         public void DEBUG_OneCycle()
         {// ResetMigration must be done by Simulation Object
             GrowFood();
+            HerbivoreFeedingCycle();
+            CarnivoreFeedingCycle();
             BirthCycle();
             //Migration
             AgeCycle();
