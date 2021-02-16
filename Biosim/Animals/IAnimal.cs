@@ -15,7 +15,7 @@ namespace Biosim.Animals
         bool Migrated { get; set; }
 
         //Directions Migrate(Directions[] dir);
-        Animal Birth(int sameSpeciesInCell);
+        IAnimal Birth(int sameSpeciesInCell);
         void Death();
         void UpdateWeight(); //Lose weight
         void GrowOlder(); // Increment Age

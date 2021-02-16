@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Biosim.Animals;
+using Biosim.Simulation;
 using Biosim.Land;
 using Biosim.Parameters;
 
@@ -11,21 +12,46 @@ namespace Biosim
 {
     class Program
     {
+        public static Random rng;
         static void Main(string[] args)
         {
-            //tNewMethod();
-            var rng = new Random();
-            //testDeaths(rng);
-            var carnivore = new Carnivore(rng) { Weight = 5, Age = 5 };
-            Console.WriteLine(carnivore.Fitness);
-            carnivore.Params.F = 50;
-            var herbs = new List<Herbivore>();
-            for (int i = 0; i < 10; i++) herbs.Add(new Herbivore(rng) { Age = 90, Weight = 10 });
-            carnivore.Feed(herbs);
-            Console.WriteLine(carnivore.Fitness);
+            rng = new Random();
+            var sim = new Sim();
+            Console.WriteLine(sim);
 
+            SingleCell();
 
             Console.ReadLine();
+        }
+
+        public static void SingleCell()
+        {
+            var thisCell = new Position { x = 1, y = 1 };
+            var jungle = new Jungle(thisCell, rng, Enumerable.Range(0, 100).Select(i => new Herbivore(rng, thisCell)).ToList(), Enumerable.Range(0, 5).Select(i => new Carnivore(rng, thisCell)).ToList());
+            for (int i = 0; i < 10; i++)
+            {
+                var carnFit = jungle.Carnivores.Count() == 0 ? 0 : jungle.Carnivores.Select(x => x.Fitness).Sum() / jungle.Carnivores.Count();
+                var herbFit = jungle.Herbivores.Count() == 0 ? 0 : jungle.Herbivores.Select(x => x.Fitness).Sum() / jungle.Herbivores.Count();
+                Console.WriteLine($"AverageCarn Fitness: {carnFit}\tAverageHerb Fitness: {herbFit}");
+                Console.WriteLine($"Plants: {jungle.Food}\tHerbivore Biomass: {jungle.CarnivoreFood}\tHerbivores: {jungle.Herbivores.Count()}\tCarnivores: {jungle.Carnivores.Count()}");
+                jungle.DEBUG_OneCycle();
+            }
+        }
+
+        public static void CTest()
+        {
+            var rng = new Random();
+            var testCarn = new Carnivore(rng) { Age = 5, Weight = 60 }; // Healthy Carnivore
+            var herbs = new List<Herbivore>();
+            for (int i = 0; i < 100; i++)
+            {
+                herbs.Add(new Herbivore(rng) { Age = 50, Weight = 5 }); // Add ten old herbivores
+            }
+            var initialW = testCarn.Weight;
+            testCarn.Params.F = 10.0; // Set "Hunger" to two herbivores
+            testCarn.Feed(herbs);
+            var endW = testCarn.Weight;
+            Console.WriteLine(initialW < endW);
         }
 
         private static void testDeaths(Random rng)
@@ -50,7 +76,11 @@ namespace Biosim
             animals[1].Age = 5;
             animals[1].Params.Mu = 1;
             animals[1].Migrate(new Directions[] { Directions.Down, Directions.Up, Directions.Left, Directions.Right });
-            Console.ReadLine();
+        }
+
+        private static void OverloadFeedCarn()
+        {
+            
         }
     }
 }

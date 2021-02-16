@@ -12,6 +12,7 @@ namespace Biosim.Land
         // Fields
 
         // Properties {get; set;}
+        public Random Rng { get; set; }
         public bool Passable { get; set; } = false;
         public Position Pos { get; set; }
         public List<Herbivore> Herbivores { get; set; }
@@ -20,11 +21,13 @@ namespace Biosim.Land
         public int NumberOfHerbivores => Herbivores.Count();
         public int NumberOfCarnivores => Carnivores.Count();
         public int TotalIndividuals => NumberOfCarnivores + NumberOfHerbivores;
+        public double CarnivoreFood => Herbivores.Select(i => i.Weight).Sum();
 
         // Constructor & Overloads
 
-        public Enviroment(Position pos, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null)
+        public Enviroment(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null)
         {
+            Rng = rng;
             Pos = pos;
             if(initialHerbivores is null)
             {
@@ -69,8 +72,37 @@ namespace Biosim.Land
 
         public void BirthCycle()
         {
+            List<Herbivore> newbornHerbivores = new List<Herbivore>();
+            List<Carnivore> newbornCarnivores = new List<Carnivore>();
             Herbivores = Herbivores.OrderBy(i => i.Fitness).ToList();
+            foreach (var herb in Herbivores)
+            {
+                var result = herb.Birth(Herbivores.Count());
+                if (!(result is null))
+                {
+                    newbornHerbivores.Add((Herbivore)result);
+                }
+            }
+            foreach (var child in newbornHerbivores)
+            {
+                Herbivores.Add(child);
+            }
+
+
             Carnivores = Carnivores.OrderBy(i => i.Fitness).ToList();
+            foreach (var carn in Carnivores)
+            {
+                var result = carn.Birth(Carnivores.Count());
+                if (!(result is null)) 
+                {
+                    newbornCarnivores.Add((Carnivore)result);
+                }
+            }
+            foreach (var child in newbornCarnivores)
+            {
+                Carnivores.Add(child);
+            }
+            Console.WriteLine($"births: {newbornHerbivores.Count()}\t{newbornCarnivores.Count()}");
         }
 
         public void AgeCycle()
@@ -87,21 +119,25 @@ namespace Biosim.Land
 
         public void RemoveDeadIndividuals()
         {
+            List<Herbivore> survivingHerbivores = new List<Herbivore>();
             foreach (var herb in Herbivores)
             {
-                if (!herb.IsAlive)
+                if (herb.IsAlive)
                 {
-                    Herbivores.Remove(herb);
+                    survivingHerbivores.Add(herb);
                 }
             }
 
+            List<Carnivore> survivingCarnivores = new List<Carnivore>();
             foreach (var carn in Carnivores)
             {
-                if (!carn.IsAlive)
+                if (carn.IsAlive)
                 {
-                    Carnivores.Remove(carn);
+                    survivingCarnivores.Add(carn);
                 }
             }
+            Herbivores = survivingHerbivores;
+            Carnivores = survivingCarnivores;
         }
 
         public int ResetGivenBirthParameter()
@@ -125,6 +161,18 @@ namespace Biosim.Land
             return migrations;
         }
 
+        public void DEBUG_OneCycle()
+        {// ResetMigration must be done by Simulation Object
+            GrowFood();
+            BirthCycle();
+            //Migration
+            AgeCycle();
+            WeightLossCycle();
+            DeathCycle();
+            RemoveDeadIndividuals();
+            ResetGivenBirthParameter();
+        }
+
         // Methods
     }
 
@@ -137,7 +185,7 @@ namespace Biosim.Land
 
         // Constructor & Overloads
 
-        public Desert(Position pos, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, initialHerbivores, initialCarnivores)
+        public Desert(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
         }
@@ -155,7 +203,7 @@ namespace Biosim.Land
 
         // Constructor & Overloads
 
-        public Ocean(Position pos) : base(pos)
+        public Ocean(Position pos, Random rng) : base(pos, rng)
         {
 
         }
@@ -172,7 +220,7 @@ namespace Biosim.Land
 
         // Constructor & Overloads
 
-        public Mountain(Position pos) : base(pos)
+        public Mountain(Position pos, Random rng) : base(pos, rng)
         {
 
         }
@@ -183,7 +231,7 @@ namespace Biosim.Land
     public class Savannah : Enviroment
     {
         SavannahParams Params = new SavannahParams();
-        public Savannah(Position pos, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, initialHerbivores, initialCarnivores)
+        public Savannah(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
         }
@@ -198,7 +246,7 @@ namespace Biosim.Land
     public class Jungle : Enviroment
     {
         JungleParams Params = new JungleParams();
-        public Jungle(Position pos, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, initialHerbivores, initialCarnivores)
+        public Jungle(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
         }

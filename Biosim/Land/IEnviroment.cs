@@ -16,6 +16,7 @@ namespace Biosim.Land
         int NumberOfHerbivores { get; }
         int NumberOfCarnivores { get; }
         int TotalIndividuals { get; }
+        double CarnivoreFood { get; }
 
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
@@ -27,5 +28,6 @@ namespace Biosim.Land
         void AgeCycle();
         void WeightLossCycle();
         void RemoveDeadIndividuals();
+        void DEBUG_OneCycle();
     }
 }

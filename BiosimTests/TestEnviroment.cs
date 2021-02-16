@@ -16,12 +16,14 @@ namespace BiosimTests
         [Fact]
         public void MigrationResetTest()
         {
-            var env = new Jungle(new Position() { x=5, y=5});
-            var animals = new List<IAnimal>();
-            
-
-            var migrated = animals.Where(i => i.Migrated).Count();
-
+            var env = new Jungle(new Position() { x=5, y=5}, rng);
+            env.Herbivores = Enumerable.Range(0, 10).Select(i => new Herbivore(rng)).ToList();
+            env.Herbivores[0].Migrated = true;
+            env.Herbivores[4].Migrated = true;
+            env.Herbivores[6].Migrated = true;
+            int migrated = env.Herbivores.Where(i => i.Migrated).Count();
+            env.ResetMigrationParameter();
+            Assert.NotEqual(migrated, env.Herbivores.Where(i => i.Migrated).Count());
         }
     }
 }

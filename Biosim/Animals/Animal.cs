@@ -10,6 +10,7 @@ namespace Biosim.Animals
     {
 
         // Fields
+        //private double _fitness;
         private double weight;
         private Position pos = new Position(); // Should replace with faster way of holding key-value pairs
         internal Random rng;
@@ -28,6 +29,7 @@ namespace Biosim.Animals
             set { pos = value; }
         }
 
+        //public double Fitness { get { return Qneg * Qplus; } set { _fitness = value; } }
         public double Fitness => Qneg * Qplus;
         public virtual double Qplus { get; set; }
         public virtual double Qneg { get; set; }
@@ -38,10 +40,17 @@ namespace Biosim.Animals
 
         // Constructors & Overloads
 
-        public Animal(Random _rng)
+        public Animal(Random _rng, Position pos)
         {
             rng = _rng;
             Age = 0;
+            if (pos is null)
+            {
+                Pos = new Position { x = 0, y = 0 };
+            } else
+            {
+                Pos = pos;
+            }
             //Console.WriteLine(rng.NextDouble());
         }
 
@@ -60,7 +69,7 @@ namespace Biosim.Animals
         }
 
 
-        public Animal Birth(int sameSpeciesInCell)
+        public IAnimal Birth(int sameSpeciesInCell)
         {
             if (GivenBirth) return null;
             double probability;
@@ -75,13 +84,13 @@ namespace Biosim.Animals
 
             if (probability > rng.NextDouble())
             {
-                Animal newborn;
+                IAnimal newborn;
                 if (this.GetType().Name == "Herbivore")
                 {
-                    newborn = new Herbivore(rng);
+                    newborn = new Herbivore(rng, this.Pos);
                 } else
                 {
-                    newborn = new Carnivore(rng);
+                    newborn = new Carnivore(rng, this.Pos);
                 }
                 double bWeight = newborn.Weight;
                 if (bWeight >= Weight || bWeight <= 0) return null;
@@ -128,7 +137,7 @@ namespace Biosim.Animals
         
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Herbivore(Random rng, IAnimalParams customParameters = null) : base(rng)
+        public Herbivore(Random rng, Position pos = null, IAnimalParams customParameters = null) : base(rng, pos)
         {
             if (customParameters is null)
             {
@@ -155,7 +164,7 @@ namespace Biosim.Animals
         
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
         public override double Qneg => 1 / (1 + Math.Exp(-Params.PhiWeight * (Weight - Params.WHalf)));
-        public Carnivore(Random rng, IAnimalParams customParameters = null) : base(rng)
+        public Carnivore(Random rng, Position pos = null, IAnimalParams customParameters = null) : base(rng, pos)
         {
             if (customParameters is null)
             {
@@ -169,15 +178,18 @@ namespace Biosim.Animals
             Weight = norm.Sample();
         }
 
-        public void Feed(List<Herbivore> herbivores)
+        public void FeedOld(List<Herbivore> herbivores)
         {
             // Go through all Herbivores one by one, killing to reach Params.F. 
             // Check if the herbivore is alive with herb.IsAlive
             double eaten = 0;
             foreach (var herb in herbivores)
             {
-                Console.WriteLine($"Self Fitness: {Fitness}\t Herb fitness: {herb.Fitness}");
-                if (eaten >= Params.F) break; // Animal is full
+                if (eaten >= Params.F)
+                {
+                    Console.WriteLine("Carnivore has reached F eaten of H.Weight");
+                    break; // Animal is full
+                }
                 if (!herb.IsAlive) continue; // Animal is already dead
                 if (Fitness <= herb.Fitness) continue; // Cannot kill animal, try the next one
                 if (0 < Fitness - herb.Fitness && Fitness - herb.Fitness < Params.DeltaPhiMax)
@@ -197,7 +209,54 @@ namespace Biosim.Animals
                     Weight += herb.Weight * Params.Beta;
                     herb.Kill();
                 }
+                
+
             }
+        }
+
+        public int Feed(List<Herbivore> herbs)
+        {
+            int killed = 0;
+            double eaten = 0.0;
+            foreach (var h in herbs)
+            {
+                if (eaten >= Params.F)
+                {
+                    //Carnivore is full, stop hunting
+                    break;
+                }
+                if (Fitness < h.Fitness)
+                {
+                    //Herbivore has too high fitness to kill, go to next H
+                    continue;
+                } else if (0 < Fitness - h.Fitness && Fitness - h.Fitness < Params.DeltaPhiMax)
+                {
+                    // try to kill
+                    if (rng.NextDouble() < (Fitness - h.Fitness)/Params.DeltaPhiMax)
+                    {
+                        // Animal is killed
+                        eaten += KillHerbivore(h);
+                        killed++;
+                    } else
+                    {
+                        // Kill fails
+                        continue; // Redundant continue...
+                    }
+                } else
+                {
+                    // Carnivore will kill
+                    eaten += KillHerbivore(h);
+                    killed++;
+                }
+            }
+            return killed;
+        }
+
+        public double KillHerbivore(Herbivore herb)
+        {
+            Weight += herb.Weight * Params.Beta;
+            herb.Kill();
+            return herb.Weight;
         }
     }
 

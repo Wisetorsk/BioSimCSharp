@@ -29,6 +29,15 @@ namespace BiosimTests
             Assert.True(initialWeight < endWeight);
         }
 
+
+        [Fact]
+        public void HerbivoreFeedingIncreasesFitnessTest()
+        {
+            /*food => Phat*/
+            
+        }
+
+
         [Fact]
         public void HerbivoreFeedWhenLessThanFTest()
         {
