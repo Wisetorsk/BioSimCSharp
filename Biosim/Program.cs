@@ -21,32 +21,33 @@ namespace Biosim
             Console.WriteLine(sim);
 
             SingleCell();
-            Console.WriteLine("All runs complete!");
+            Console.WriteLine("All runs complete! Press enter to run scripts");
+            Console.ReadLine();
+            System.Diagnostics.Process.Start("CMD.exe", "/C python ../../Scripts/plot.py");
+            Console.WriteLine("Press enter to close this window");
             Console.ReadLine();
         }
 
         public static void SingleCell()
         {
             bool debug = false;
-            using (TextWriter sw = new StreamWriter("SimResult.csv"))
+            using (TextWriter sw = new StreamWriter("../../Results/SimResult.csv"))
             {
+                sw.WriteLine("Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
                 var thisCell = new Position { x = 1, y = 1 };
                 var jungle = new Jungle(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 300; i++)
                 {
-                    //var carnFit = jungle.Carnivores.Count() == 0 ? 0 : jungle.Carnivores.Select(x => x.Fitness).Sum() / jungle.Carnivores.Count();
-                    //var herbFit = jungle.Herbivores.Count() == 0 ? 0 : jungle.Herbivores.Select(x => x.Fitness).Sum() / jungle.Herbivores.Count();
                     if (i % 25 == 0 && debug)
                     {
                         var weights = jungle.GetAverageWeight();
                         Console.WriteLine(new string('=', Console.WindowWidth));
                         Console.WriteLine($"Year: {i}");
-                       // Console.WriteLine($"AverageCarn Fitness: {carnFit}\nAverageHerb Fitness: {herbFit}");
                         Console.WriteLine($"AverageCarn Weight: {weights[1]}\nAverageHerb Weight: {weights[0]}");
                         Console.WriteLine($"Plants: {jungle.Food}\tHerbivore Biomass: {jungle.CarnivoreFood}\nHerbivores: {jungle.Herbivores.Count()}\tCarnivores: {jungle.Carnivores.Count()}");
                     }
                     jungle.DEBUG_OneCycle();
-                    sw.WriteLine($"{i},{jungle.NumberOfHerbivores},{jungle.NumberOfCarnivores},{jungle.HerbivoreAvgFitness:E},{jungle.CarnivoreAvgFitness:E}");
+                    sw.WriteLine($"{i},{jungle.NumberOfHerbivores},{jungle.NumberOfCarnivores},{jungle.HerbivoreAvgFitness.ToString().Replace(',', '.')},{jungle.CarnivoreAvgFitness.ToString().Replace(',','.')}");
                     if (jungle.Herbivores.Count() + jungle.Carnivores.Count() <= 0) break;
                 }
             }

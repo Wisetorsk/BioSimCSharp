@@ -66,8 +66,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scripts\plot.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Results\" />
     <Folder Include="Tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
