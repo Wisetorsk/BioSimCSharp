@@ -16,11 +16,17 @@ namespace Biosim
         public static Random rng;
         static void Main(string[] args)
         {
+            int yearsToSimulate = 0;
+            if (args[0] == "/y")
+            {
+                int.TryParse(args[1], out yearsToSimulate);
+            }
+            yearsToSimulate = yearsToSimulate == 0 ? 100 : yearsToSimulate;
             rng = new Random();
-            var sim = new Sim();
-            Console.WriteLine(sim);
+            var sim = new Sim("", yearsToSimulate);
+            //Console.WriteLine(sim);
 
-            SingleCell();
+            SingleCell(yearsToSimulate);
             Console.WriteLine("All runs complete! Press enter to run scripts");
             Console.ReadLine();
             System.Diagnostics.Process.Start("CMD.exe", "/C python ../../Scripts/plot.py");
@@ -28,15 +34,16 @@ namespace Biosim
             Console.ReadLine();
         }
 
-        public static void SingleCell()
+        public static void SingleCell(int simYears)
         {
+            Console.WriteLine($"Running simulation for {simYears} Years");
             bool debug = false;
             using (TextWriter sw = new StreamWriter("../../Results/SimResult.csv"))
             {
                 sw.WriteLine("Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
                 var thisCell = new Position { x = 1, y = 1 };
                 var jungle = new Jungle(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
-                for (int i = 0; i < 300; i++)
+                for (int i = 0; i < simYears; i++)
                 {
                     if (i % 25 == 0 && debug)
                     {
@@ -54,49 +61,6 @@ namespace Biosim
             
         }
 
-        public static void CTest()
-        {
-            var rng = new Random();
-            var testCarn = new Carnivore(rng) { Age = 5, Weight = 60 }; // Healthy Carnivore
-            var herbs = new List<Herbivore>();
-            for (int i = 0; i < 100; i++)
-            {
-                herbs.Add(new Herbivore(rng) { Age = 50, Weight = 5 }); // Add ten old herbivores
-            }
-            var initialW = testCarn.Weight;
-            testCarn.Params.F = 10.0; // Set "Hunger" to two herbivores
-            testCarn.Feed(herbs);
-            var endW = testCarn.Weight;
-            Console.WriteLine(initialW < endW);
-        }
-
-        private static void testDeaths(Random rng)
-        {
-            List<bool> results = new List<bool>();
-            for (int i = 0; i < 10000; i++)
-            {
-                var testHerbivore = new Herbivore(rng) { Age = 6, Weight = 100 }; // Herbivore with low fitness
-                testHerbivore.Params.Omega = 1;
-                testHerbivore.Death();
-                results.Add(testHerbivore.IsAlive);
-            }
-            Console.WriteLine($"deaths: {results.Where(i => !i).Count() / (double)results.Count() * 100}");
-        }
-
-        private static void tNewMethod()
-        {
-            var rng = new Random();
-            var animals = new List<Herbivore> { new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng), new Herbivore(rng) };
-
-            animals[1].Weight = 100;
-            animals[1].Age = 5;
-            animals[1].Params.Mu = 1;
-            animals[1].Migrate(new Directions[] { Directions.Down, Directions.Up, Directions.Left, Directions.Right });
-        }
-
-        private static void OverloadFeedCarn()
-        {
-            
-        }
+        
     }
 }
