@@ -9,6 +9,8 @@ namespace BiosimTests
 {
     public class TestHerbivore
     {
+        public static Position testCoor = new Position {x = 1, y = 1};
+
         [Fact]
         public void HerbivoreFeedReducesAmountTest()
         {
@@ -34,7 +36,12 @@ namespace BiosimTests
         public void HerbivoreFeedingIncreasesFitnessTest()
         {
             /*food => Phat*/
-            
+            var testHerbivore = new Herbivore(new Random(), testCoor);
+            var food = 100;
+            testHerbivore.Params.F = 25;
+            var initialFitness = testHerbivore.Fitness;
+            var remainder = testHerbivore.Feed(food);
+            var endFitness = testHerbivore.Fitness;
         }
 
 

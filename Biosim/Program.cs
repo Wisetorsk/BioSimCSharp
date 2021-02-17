@@ -28,12 +28,17 @@ namespace Biosim
         {
             var thisCell = new Position { x = 1, y = 1 };
             var jungle = new Jungle(thisCell, rng, Enumerable.Range(0, 100).Select(i => new Herbivore(rng, thisCell) { Weight=25}).ToList(), Enumerable.Range(0, 30).Select(i => new Carnivore(rng, thisCell) { Weight=20}).ToList());
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 200; i++)
             {
                 var carnFit = jungle.Carnivores.Count() == 0 ? 0 : jungle.Carnivores.Select(x => x.Fitness).Sum() / jungle.Carnivores.Count();
                 var herbFit = jungle.Herbivores.Count() == 0 ? 0 : jungle.Herbivores.Select(x => x.Fitness).Sum() / jungle.Herbivores.Count();
-                Console.WriteLine($"AverageCarn Fitness: {carnFit}\tAverageHerb Fitness: {herbFit}");
-                Console.WriteLine($"Plants: {jungle.Food}\tHerbivore Biomass: {jungle.CarnivoreFood}\tHerbivores: {jungle.Herbivores.Count()}\tCarnivores: {jungle.Carnivores.Count()}");
+                if (i%25==0)
+                {
+                    Console.WriteLine(new string('=', Console.WindowWidth));
+                    Console.WriteLine($"Year: {i}");
+                    Console.WriteLine($"AverageCarn Fitness: {carnFit}\nAverageHerb Fitness: {herbFit}");
+                    Console.WriteLine($"Plants: {jungle.Food}\tHerbivore Biomass: {jungle.CarnivoreFood}\nHerbivores: {jungle.Herbivores.Count()}\tCarnivores: {jungle.Carnivores.Count()}");
+                }
                 jungle.DEBUG_OneCycle();
                 if (jungle.Herbivores.Count() + jungle.Carnivores.Count() <= 0) break;
             }

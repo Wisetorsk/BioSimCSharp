@@ -108,7 +108,7 @@ namespace Biosim.Animals
 
         public void UpdateWeight()
         {
-            Weight *= Params.Eta;
+            Weight -= Weight * Params.Eta;
         }
 
         public void GrowOlder()

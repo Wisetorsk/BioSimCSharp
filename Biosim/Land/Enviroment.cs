@@ -102,7 +102,6 @@ namespace Biosim.Land
             {
                 Carnivores.Add(child);
             }
-            Console.WriteLine($"births: {newbornHerbivores.Count()}\t{newbornCarnivores.Count()}");
         }
 
         public void AgeCycle()
