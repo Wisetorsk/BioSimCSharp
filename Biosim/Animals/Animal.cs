@@ -115,7 +115,7 @@ namespace Biosim.Animals
         {
             Age += 1;
         }
-
+         
         public override string ToString()
         {
             return $"{this.GetType().Name}\nAlive: {(IsAlive ? "Alive" : "Dead")}\nAge: {Age}\nWeight: {Weight}\nFitness: {Fitness}\n{this.Pos}";
@@ -225,6 +225,7 @@ namespace Biosim.Animals
                     //Carnivore is full, stop hunting
                     break;
                 }
+                if (!h.IsAlive) continue; // Animal is already dead
                 if (Fitness < h.Fitness)
                 {
                     //Herbivore has too high fitness to kill, go to next H

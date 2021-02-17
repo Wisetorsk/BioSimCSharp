@@ -22,6 +22,11 @@ namespace Biosim.Land
         public int NumberOfCarnivores => Carnivores.Count();
         public int TotalIndividuals => NumberOfCarnivores + NumberOfHerbivores;
         public double CarnivoreFood => Herbivores.Select(i => i.Weight).Sum();
+        public int KilledByCarnivores { get; set; }
+        public int DeadCarnivores { get; set; }
+        public int DeadHerbivores { get; set; }
+        public int NewHerbivores { get; set; }
+        public int NewCarnivores { get; set; }
 
         // Constructor & Overloads
 
@@ -55,13 +60,23 @@ namespace Biosim.Land
             }
         }
 
+        public double[] GetAverageWeight()
+        {
+            return new double[2] {
+                Herbivores.Select(i => i.Weight).Average(),
+                Carnivores.Select(i => i.Weight).Average()
+            };
+        }
+
         public void CarnivoreFeedingCycle()
         {
             Carnivores = Carnivores.OrderBy(i => i.Fitness).ToList();
+            var kills = 0;
             foreach (var carn in Carnivores)
             {
-                carn.Feed(Herbivores);
+                kills += carn.Feed(Herbivores);
             }
+            KilledByCarnivores = kills;
         }
 
         public void DeathCycle()
@@ -75,9 +90,10 @@ namespace Biosim.Land
             List<Herbivore> newbornHerbivores = new List<Herbivore>();
             List<Carnivore> newbornCarnivores = new List<Carnivore>();
             Herbivores = Herbivores.OrderBy(i => i.Fitness).ToList();
+            var numHerb = Herbivores.Count();
             foreach (var herb in Herbivores)
             {
-                var result = herb.Birth(Herbivores.Count());
+                var result = herb.Birth(numHerb);
                 if (!(result is null))
                 {
                     newbornHerbivores.Add((Herbivore)result);
@@ -87,12 +103,13 @@ namespace Biosim.Land
             {
                 Herbivores.Add(child);
             }
-
+            NewHerbivores = newbornHerbivores.Count();
 
             Carnivores = Carnivores.OrderBy(i => i.Fitness).ToList();
+            var numCarn = Carnivores.Count();
             foreach (var carn in Carnivores)
             {
-                var result = carn.Birth(Carnivores.Count());
+                var result = carn.Birth(numCarn);
                 if (!(result is null)) 
                 {
                     newbornCarnivores.Add((Carnivore)result);
@@ -102,6 +119,7 @@ namespace Biosim.Land
             {
                 Carnivores.Add(child);
             }
+            NewCarnivores = newbornCarnivores.Count();
         }
 
         public void AgeCycle()
@@ -118,6 +136,8 @@ namespace Biosim.Land
 
         public void RemoveDeadIndividuals()
         {
+            DeadCarnivores = Carnivores.Where(i => !i.IsAlive).Count();
+            DeadHerbivores = Herbivores.Where(i => !i.IsAlive).Count();
             List<Herbivore> survivingHerbivores = new List<Herbivore>();
             foreach (var herb in Herbivores)
             {

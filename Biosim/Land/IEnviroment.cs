@@ -17,6 +17,11 @@ namespace Biosim.Land
         int NumberOfCarnivores { get; }
         int TotalIndividuals { get; }
         double CarnivoreFood { get; }
+        int KilledByCarnivores { get; set; }
+        int DeadCarnivores { get; set; }
+        int DeadHerbivores { get; set; }
+        int NewHerbivores { get; set; }
+        int NewCarnivores { get; set; }
 
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
@@ -29,5 +34,6 @@ namespace Biosim.Land
         void WeightLossCycle();
         void RemoveDeadIndividuals();
         void DEBUG_OneCycle();
+        double[] GetAverageWeight();
     }
 }

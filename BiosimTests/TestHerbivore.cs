@@ -165,9 +165,12 @@ namespace BiosimTests
             /*Description*/
             var rng = new Random();
             var testHerb = new Herbivore(rng);
-            var initialW = testHerb.Weight;
+            var presetWeight = 100;
+            testHerb.Weight = presetWeight;
             testHerb.UpdateWeight();
-            Assert.True(initialW > testHerb.Weight);
+            var amountToLose = presetWeight * testHerb.Params.Eta;
+            Assert.True(presetWeight > testHerb.Weight);
+            Assert.True(presetWeight - testHerb.Weight == amountToLose);
         }
 
 
