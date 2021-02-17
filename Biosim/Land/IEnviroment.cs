@@ -22,6 +22,8 @@ namespace Biosim.Land
         int DeadHerbivores { get; set; }
         int NewHerbivores { get; set; }
         int NewCarnivores { get; set; }
+        double HerbivoreAvgFitness { get; }
+        double CarnivoreAvgFitness { get; }
 
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
