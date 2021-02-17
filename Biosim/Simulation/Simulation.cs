@@ -119,6 +119,12 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
+        public void Plot()
+        {
+            System.Diagnostics.Process.Start("CMD.exe", "/C python ../../Scripts/plot.py");
+            Console.WriteLine("Press enter to close this window");
+        }
+
         public void RemoveDead()
         {
             throw new NotImplementedException();

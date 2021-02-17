@@ -13,6 +13,7 @@ namespace Biosim.Simulation
         Position DefaultDim { get; set; }
         int YearsToSimulate { get; set; }
         Random Rng { get; set; }
+        LogWriter Logger { get; set; }
 
         void OneYear();
         void Build();
@@ -28,5 +29,7 @@ namespace Biosim.Simulation
         void ResetSeasonalParams();
         void Simulate();
         void DisplayIslandString();
+
+        void Plot();
     }
 }
