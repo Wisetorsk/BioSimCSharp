@@ -12,9 +12,10 @@ namespace Biosim.Simulation
     public class Sim : ISimulation
 
     {
-        public Sim(int yearsToSimulate = 100, string template = null)
+        public Sim(string filepath,  int yearsToSimulate = 100, string template = null)
         {
             Rng = new Random();
+            Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
             YearsToSimulate = yearsToSimulate;
             if (template is null)
             {
@@ -30,6 +31,7 @@ namespace Biosim.Simulation
         public List<List<IEnviroment>> Land { get; set; }
         public Position DefaultDim { get; set; } = new Position { x = 10, y = 10 };
         public Random Rng { get; set; }
+        public LogWriter Logger { get; set; }
 
         public void AddAnimals(List<IAnimal> animals)
         {

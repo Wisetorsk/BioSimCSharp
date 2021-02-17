@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Biosim.Simulation
 {
-    class LogWriter
+    public class LogWriter
     {
         /*
          Collects all data and writes it to csv */
