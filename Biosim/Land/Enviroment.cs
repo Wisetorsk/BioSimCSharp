@@ -27,8 +27,8 @@ namespace Biosim.Land
         public int DeadHerbivores { get; set; }
         public int NewHerbivores { get; set; }
         public int NewCarnivores { get; set; }
-        public double HerbivoreAvgFitness => Herbivores.Select(i => i.Fitness).Average();
-        public double CarnivoreAvgFitness => Carnivores.Select(i => i.Fitness).Average();
+        public double HerbivoreAvgFitness => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Fitness).Average() : 0;
+        public double CarnivoreAvgFitness => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Fitness).Average() : 0;
 
         // Constructor & Overloads
 
