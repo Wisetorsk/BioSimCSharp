@@ -50,6 +50,8 @@ namespace BiosimTests
         {
             Herbivore testHerb = new Herbivore(new Random());
             double F = testHerb.Params.F;
+
+
             double available = F - 5.0;
             double remainder = testHerb.Feed(available);
             Assert.Equal(0, remainder);

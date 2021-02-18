@@ -31,6 +31,14 @@ namespace Biosim.Land
         public double CarnivoreAvgFitness => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Fitness).Average() : 0;
         public EnvParams Params { get; set; }
 
+        public double HerbivoreAvgWeight => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Weight).Average() : 0;
+
+        public double CarnivoreAvgWeight => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Weight).Average() : 0;
+
+        public double HerbivoreAvgAge => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Age).Average() : 0;
+
+        public double CarnivoreAvgAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Average() : 0;
+
         // Constructor & Overloads
 
         public Enviroment(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null)

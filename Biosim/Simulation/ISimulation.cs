@@ -28,11 +28,12 @@ namespace Biosim.Simulation
         void RemoveDead();
         void Breed();
         void ResetSeasonalParams();
-        void Simulate();
+        void Simulate(int years);
         void DisplayIslandString();
         void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters);
         void LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters);
-        IEnviroment[] GetSurroundingCells(Position cellPos);
+        Position[] GetSurroundingCells(Position cellPos);
         void Plot();
+        void ChangeCellParameters(Position cellPos, EnvParams newParams);
     }
 }

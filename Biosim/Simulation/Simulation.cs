@@ -103,6 +103,11 @@ namespace Biosim.Simulation
             return new Position() { x = xDim, y = yDim };
         }
 
+        public void ChangeCellParameters(Position cellPos, EnvParams newParams)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Death()
         {
             throw new NotImplementedException();
@@ -118,9 +123,23 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public IEnviroment[] GetSurroundingCells(Position cellPos)
+        public Position[] GetSurroundingCells(Position cellPos)
         {
-            throw new NotImplementedException();
+            var neighbors = new List<IEnviroment>();
+            // Rerurns the surrounding cells as array;
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if (cellPos.x + i <= 0 || cellPos.x + i > Dimentions.x) continue;
+                    if (cellPos.y + j <= 0 || cellPos.y + j > Dimentions.y) continue;
+                    if (Land[cellPos.x+i][cellPos.y+j].Passable)
+                    {
+                        neighbors.Add(Land[cellPos.x + i][cellPos.y + j]);
+                    }
+                }
+            }
+            return neighbors.Select(k => k.Pos).ToArray();
         }
 
         public void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters)
@@ -165,8 +184,8 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void Simulate()
-        {
+        public void Simulate(int years)
+        { //Runs the simulation for x years
             throw new NotImplementedException();
         }
 

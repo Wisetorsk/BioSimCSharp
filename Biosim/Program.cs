@@ -109,27 +109,40 @@ namespace Biosim
             switch (type)
             {
                 case "D":
-                    envi = new Desert(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Desert(thisCell, 
+                        rng, 
+                        Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), 
+                        Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 case "J":
-                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Jungle(thisCell, 
+                        rng, 
+                        Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), 
+                        Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 case "S":
-                    envi = new Savannah(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Savannah(thisCell, 
+                        rng, 
+                        Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), 
+                        Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 default:
-                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Jungle(thisCell, 
+                        rng, 
+                        Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), 
+                        Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
             }
             using (TextWriter sw = new StreamWriter("../../Results/SimResult.csv"))
             {
-                sw.WriteLine("Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
+                sw.WriteLine("Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness,HerbivoreAvgAge,CarnivoreAvgAge,HerbivoreAvgWeight,CarnivoreAvgWeight");
                 
                 for (int i = 0; i < simYears; i++)
                 {
-                    if (i == 200) envi.Params.Fmax = 100; // At year 200, decrease total food available
+                    if (i == 200) envi.Params.Fmax = 150; // At year 200, decrease total food available
+                    if (i == 600) envi.Params.Fmax = 500; // Increase food at year 600
                     envi.DEBUG_OneCycle();
-                    sw.WriteLine($"{i},{envi.NumberOfHerbivores},{envi.NumberOfCarnivores},{envi.HerbivoreAvgFitness.ToString().Replace(',', '.')},{envi.CarnivoreAvgFitness.ToString().Replace(',','.')}");
+                    sw.WriteLine($"{i},{envi.NumberOfHerbivores},{envi.NumberOfCarnivores},{envi.HerbivoreAvgFitness.ToString().Replace(',', '.')},{envi.CarnivoreAvgFitness.ToString().Replace(',','.')},{envi.HerbivoreAvgAge},{envi.CarnivoreAvgAge},{envi.HerbivoreAvgWeight},{envi.CarnivoreAvgWeight}");
                     if (envi.Herbivores.Count() + envi.Carnivores.Count() <= 0) {
                         Console.WriteLine($"All animals have died at year {i}");
                         break;
