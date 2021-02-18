@@ -24,6 +24,7 @@ namespace Biosim.Land
         int NewCarnivores { get; set; }
         double HerbivoreAvgFitness { get; }
         double CarnivoreAvgFitness { get; }
+        EnvParams Params { get; set; }
 
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
@@ -37,5 +38,9 @@ namespace Biosim.Land
         void RemoveDeadIndividuals();
         void DEBUG_OneCycle();
         double[] GetAverageWeight();
+        void OverloadParameters(IAnimal animal, IAnimalParams parameters);
+        void OverloadParameters(int index, string type, IAnimalParams parameters);
+        void OverloadAllHerbivores(HerbivoreParams parameters);
+        void OverloadAllCarnivores(CarnivoreParams parameters);
     }
 }

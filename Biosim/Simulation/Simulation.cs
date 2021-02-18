@@ -24,6 +24,7 @@ namespace Biosim.Simulation
             {
                 TemplateString = template;
             }
+            Dimentions = Build();
         }
 
         public int YearsToSimulate { get; set; }
@@ -32,18 +33,19 @@ namespace Biosim.Simulation
         public Position DefaultDim { get; set; } = new Position { x = 10, y = 10 };
         public Random Rng { get; set; }
         public LogWriter Logger { get; set; }
+        public Position Dimentions { get; set; }
 
-        public void AddAnimals(List<IAnimal> animals)
+        public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
             throw new NotImplementedException();
         }
 
-        public void AddCarnivore(int age, double w, IAnimalParams par)
+        public void AddCarnivore(int age, double w, IAnimalParams par, Position cellPosition)
         {
             throw new NotImplementedException();
         }
 
-        public void AddHerbivore(int age, double w, IAnimalParams par)
+        public void AddHerbivore(int age, double w, IAnimalParams par, Position cellPosition)
         {
             throw new NotImplementedException();
         }
@@ -64,9 +66,12 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void Build()
+        public Position Build()
         {
+            Land = new List<List<IEnviroment>>();
             var lines = TemplateString.Split('\n');
+            var xDim = lines.Length;
+            var yDim = lines[0].Length-1;
             for (int i = 0; i < lines.Length; i++)
             {
                 List<IEnviroment> islandLine = new List<IEnviroment>();
@@ -93,7 +98,9 @@ namespace Biosim.Simulation
                             break;
                     }
                 }
+                Land.Add(islandLine);
             }
+            return new Position() { x = xDim, y = yDim };
         }
 
         public void Death()
@@ -111,9 +118,30 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void Migrate()
+        public IEnviroment[] GetSurroundingCells(Position cellPos)
         {
             throw new NotImplementedException();
+        }
+
+        public void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Migrate()
+        {
+            for (int i = 0; i < Dimentions.x; i++)
+            {
+                for (int j = 0; j < Dimentions.y; j++)
+                {
+
+                }
+            }
         }
 
         public void OneYear()

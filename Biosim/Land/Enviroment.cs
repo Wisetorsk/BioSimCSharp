@@ -29,6 +29,7 @@ namespace Biosim.Land
         public int NewCarnivores { get; set; }
         public double HerbivoreAvgFitness => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Fitness).Average() : 0;
         public double CarnivoreAvgFitness => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Fitness).Average() : 0;
+        public EnvParams Params { get; set; }
 
         // Constructor & Overloads
 
@@ -196,6 +197,41 @@ namespace Biosim.Land
             ResetGivenBirthParameter();
         }
 
+        public void OverloadParameters(IAnimal animal, IAnimalParams parameters)
+        {
+
+            int writemorecodehere;
+
+            animal.Params = parameters;
+        }
+
+        public void OverloadAllHerbivores(HerbivoreParams parameters)
+        {
+            Herbivores.ForEach(i => i.Params = parameters);
+        }
+
+        public void OverloadAllCarnivores(CarnivoreParams parameters)
+        {
+            Carnivores.ForEach(i => i.Params = parameters);
+        }
+
+        public void OverloadParameters(int index, string type, IAnimalParams parameters)
+        {
+            if (type.ToUpper() == "HERBIVORE" || type.ToUpper() == "H")
+            {
+                if (parameters.GetType().Name != "HerbivoreParams") throw new Exception($"Wrong Parameter type ({parameters.GetType()}) for Herbivore");
+                Herbivores[index].Params = parameters;
+                return;
+            }
+            if (type.ToUpper() == "CARNIVORE" || type.ToUpper() == "C")
+            {
+                if (parameters.GetType().Name != "CarnivoreParams") throw new Exception($"Wrong Parameter type ({parameters.GetType()}) for Carnivore");
+                Carnivores[index].Params = parameters;
+                return;
+            }
+            throw new Exception($"Unable to overload parameters. \nInput was: INDEX - {index} TYPE - {type} PARAMETERS - {parameters}");
+        }
+
         // Methods
     }
 
@@ -253,10 +289,11 @@ namespace Biosim.Land
 
     public class Savannah : Enviroment
     {
-        SavannahParams Params = new SavannahParams();
+        
         public Savannah(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
+            Params = new SavannahParams();
         }
 
         // Methods
@@ -268,10 +305,10 @@ namespace Biosim.Land
 
     public class Jungle : Enviroment
     {
-        JungleParams Params = new JungleParams();
         public Jungle(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
+            Params = new JungleParams();
         }
 
         // Methods

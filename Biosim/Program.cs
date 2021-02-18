@@ -14,26 +14,77 @@ namespace Biosim
     class Program
     {
         public static Random rng;
+        public static Dictionary<string, string> cellTypes = new Dictionary<string, string>() {
+                { "D", "Desert" },
+                {"S", "Savannah" },
+                {"J", "Jungle" },
+                {"M", "Mountain" },
+                {"O", "Ocean" }
+            };
+
         static void Main(string[] args)
         {
             int yearsToSimulate = 0;
             string celltype = "J";
+            int herbStart = 0;
+            int carnStart = 0;
+            
             try
             {
-                if (args[0] == "/y")
+                try
                 {
-                    int.TryParse(args[1], out yearsToSimulate);
+                    if (args[0] == "/y")
+                    {
+                        int.TryParse(args[1], out yearsToSimulate);
+                    }
                 }
-                if (args[2] == "/s")
+                catch (IndexOutOfRangeException)
                 {
-                    celltype = args[3];
+                    yearsToSimulate = 100;
                 }
-                yearsToSimulate = yearsToSimulate == 0 ? 100 : yearsToSimulate;
+
+                try
+                {
+                    if (args[2] == "/s")
+                    {
+                        celltype = args[3];
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    celltype = "J";
+                }
+
+                try
+                {
+                    if (args[4] == "/h")
+                    {
+                        int.TryParse(args[5], out herbStart);
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    herbStart = 25;
+                }
+
+                try
+                {
+                    if (args[6] == "/c")
+                    {
+                        int.TryParse(args[7], out carnStart);
+                    }
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    carnStart = 10;
+                }
+
                 rng = new Random();
                 var sim = new Sim("", yearsToSimulate);
                 //Console.WriteLine(sim);
 
-                SingleCell(yearsToSimulate, celltype);
+
+                SingleCell(yearsToSimulate, celltype, herbStart, carnStart);
                 Console.WriteLine("All runs complete! Press enter to run data processing scripts");
                 Console.ReadLine();
                 System.Diagnostics.Process.Start("CMD.exe", "/C python ../../Scripts/plot.py");
@@ -48,8 +99,9 @@ namespace Biosim
             Console.ReadLine();
         }
 
-        public static void SingleCell(int simYears, string type)
+        public static void SingleCell(int simYears, string type, int herbStart, int carnStart)
         {
+            Console.WriteLine($"Cell type: {cellTypes[type]}\nStarting Herbivores: {herbStart}\nStarting Carnivores: {carnStart}");
             Console.WriteLine($"Running simulation for {simYears} Years{((simYears > 300) ? ". Simulations over 300 years may take a long time, please wait." : ".")}");
             var thisCell = new Position { x = 1, y = 1 };
             IEnviroment envi;
@@ -57,33 +109,25 @@ namespace Biosim
             switch (type)
             {
                 case "D":
-                    envi = new Desert(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Desert(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 case "J":
-                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 case "S":
-                    envi = new Savannah(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Savannah(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
                 default:
-                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, 25).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, 10).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
+                    envi = new Jungle(thisCell, rng, Enumerable.Range(0, herbStart).Select(i => new Herbivore(rng, thisCell) { Weight = 25 }).ToList(), Enumerable.Range(0, carnStart).Select(i => new Carnivore(rng, thisCell) { Weight = 20 }).ToList());
                     break;
             }
-            bool debug = false;
             using (TextWriter sw = new StreamWriter("../../Results/SimResult.csv"))
             {
                 sw.WriteLine("Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
                 
                 for (int i = 0; i < simYears; i++)
                 {
-                    if (i % 25 == 0 && debug)
-                    {
-                        var weights = envi.GetAverageWeight();
-                        Console.WriteLine(new string('=', Console.WindowWidth));
-                        Console.WriteLine($"Year: {i}");
-                        Console.WriteLine($"AverageCarn Weight: {weights[1]}\nAverageHerb Weight: {weights[0]}");
-                        Console.WriteLine($"Plants: {envi.Food}\tHerbivore Biomass: {envi.CarnivoreFood}\nHerbivores: {envi.Herbivores.Count()}\tCarnivores: {envi.Carnivores.Count()}");
-                    }
+                    if (i == 200) envi.Params.Fmax = 100; // At year 200, decrease total food available
                     envi.DEBUG_OneCycle();
                     sw.WriteLine($"{i},{envi.NumberOfHerbivores},{envi.NumberOfCarnivores},{envi.HerbivoreAvgFitness.ToString().Replace(',', '.')},{envi.CarnivoreAvgFitness.ToString().Replace(',','.')}");
                     if (envi.Herbivores.Count() + envi.Carnivores.Count() <= 0) {
