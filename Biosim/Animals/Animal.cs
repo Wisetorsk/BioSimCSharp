@@ -88,9 +88,11 @@ namespace Biosim.Animals
                 if (this.GetType().Name == "Herbivore")
                 {
                     newborn = new Herbivore(rng, this.Pos);
+                    newborn.Params.OverloadParameters(Params.CopyParameters()); // Inherit params from parent
                 } else
                 {
                     newborn = new Carnivore(rng, this.Pos);
+                    newborn.Params.OverloadParameters(Params.CopyParameters()); // Inherit params from parent
                 }
                 double bWeight = newborn.Weight;
                 if (bWeight >= Weight || bWeight <= 0) return null;
@@ -129,6 +131,12 @@ namespace Biosim.Animals
                 return true;
             }
             return false;
+        }
+
+        public void UpdateParameters()
+        {
+            // Animal can update it's own parameters based on external data and randomness. 
+            throw new NotImplementedException();
         }
     }
 

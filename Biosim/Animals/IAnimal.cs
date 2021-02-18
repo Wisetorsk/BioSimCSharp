@@ -20,5 +20,6 @@ namespace Biosim.Animals
         void UpdateWeight(); //Lose weight
         void GrowOlder(); // Increment Age
         bool Kill();
+        void UpdateParameters();
     }
 }

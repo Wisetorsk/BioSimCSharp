@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Biosim.Parameters
 {
@@ -24,7 +25,7 @@ namespace Biosim.Parameters
         public void OverloadParameters(double bWeight, double bSigma, double beta, double eta, double aHalf, 
             double phiAge, double wHalf, double phiWeight, double mu, double gamma, double zeta,
             double xi, double omega, double f, double deltaPhiMax)
-        {
+        { // Re-write to use Dictionaries? Enable updating of a single parameter at a time. 
             BirthWeight = bWeight;
             BirthSigma = bSigma;
             Beta = beta;
@@ -40,6 +41,87 @@ namespace Biosim.Parameters
             Omega = omega;
             F = f;
             DeltaPhiMax = deltaPhiMax;
+        }
+
+        public void OverloadParameters(Dictionary<string, double> newParameters)
+        {
+            foreach (var parameter in newParameters)
+            {
+                switch (parameter.Key)
+                {
+                    case "BirthWeight":
+                        BirthWeight = parameter.Value;
+                        break;
+                    case "BirthSigma":
+                        BirthSigma = parameter.Value;
+                        break;
+                    case "Beta":
+                        Beta = parameter.Value;
+                        break;
+                    case "Eta":
+                        Eta = parameter.Value;
+                        break;
+                    case "AHalf":
+                        AHalf = parameter.Value;
+                        break;
+                    case "PhiAge":
+                        PhiAge = parameter.Value;
+                        break;
+                    case "WHalf":
+                        WHalf = parameter.Value;
+                        break;
+                    case "PhiWeight":
+                        PhiWeight = parameter.Value;
+                        break;
+                    case "Mu":
+                        Mu = parameter.Value;
+                        break;
+                    case "Gamma":
+                        Gamma = parameter.Value;
+                        break;
+                    case "Zeta":
+                        Zeta = parameter.Value;
+                        break;
+                    case "Xi":
+                        Xi = parameter.Value;
+                        break;
+                    case "Omega":
+                        Omega = parameter.Value;
+                        break;
+                    case "F":
+                        F = parameter.Value;
+                        break;
+                    case "DeltaPhiMax":
+                        DeltaPhiMax = parameter.Value;
+                        break;
+                    default:
+                        throw new Exception($"Unable to parse parameter name: {parameter.Key} Value: {parameter.Value}");
+                }
+            }
+        }
+
+        public Dictionary<string, double> CopyParameters()
+        {
+            // This method can be used to copy these parameters to a new parameters object. If offspring will implement genetic algorithms
+            Dictionary<string, double> outParameters = new Dictionary<string, double>()
+            {
+                { nameof(BirthWeight), BirthWeight },
+                { nameof(BirthSigma), BirthSigma },
+                { nameof(Beta), Beta },
+                { nameof(Eta), Eta },
+                { nameof(AHalf), AHalf },
+                { nameof(PhiAge), PhiAge },
+                { nameof(WHalf), WHalf },
+                { nameof(PhiWeight), PhiWeight },
+                { nameof(Mu), Mu },
+                { nameof(Gamma), Gamma },
+                { nameof(Zeta), Zeta },
+                { nameof(Xi), Xi },
+                { nameof(Omega), Omega },
+                { nameof(F), F },
+                { nameof(DeltaPhiMax), DeltaPhiMax }
+            };
+            return outParameters;
         }
 
     }
@@ -60,7 +142,7 @@ namespace Biosim.Parameters
         public override double Xi { get; set; } = 1.2;
         public override double Omega { get; set; } = 0.4;
         public override double F { get; set; } = 10.0;
-        public override double DeltaPhiMax { get => throw new Exception("NOT AVAILABLE FOR HERBIVORES"); set => throw new Exception("NOT AVAILABLE FOR HERBIVORES"); }
+        public override double DeltaPhiMax { get; set; } = 0;
     }
 
     public class CarnivoreParams : ParameterBase, IAnimalParams

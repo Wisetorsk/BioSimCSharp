@@ -149,7 +149,9 @@ namespace Biosim
                     }
                 }
             }
-            
+            Console.WriteLine();
+            Console.WriteLine(new string('=', Console.WindowWidth));
+            Console.WriteLine($"Total Herbivores created: {envi.TotalHerbivoreLives}\nTotal Carnivores created: {envi.TotalCarnivoreLives}");
         }
 
         

@@ -23,5 +23,11 @@ namespace Biosim.Parameters
         double Omega { get; set; } // Passive chance of death (1 - omega) 
         double F { get; set; }
         double DeltaPhiMax { get; set; }
+
+        Dictionary<string, double> CopyParameters();
+        void OverloadParameters(double bWeight, double bSigma, double beta, double eta, double aHalf,
+            double phiAge, double wHalf, double phiWeight, double mu, double gamma, double zeta,
+            double xi, double omega, double f, double deltaPhiMax);
+        void OverloadParameters(Dictionary<string, double> newParameters);
     }
 }

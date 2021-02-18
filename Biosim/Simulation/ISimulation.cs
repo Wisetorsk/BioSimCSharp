@@ -30,7 +30,7 @@ namespace Biosim.Simulation
         void ResetSeasonalParams();
         void Simulate(int years);
         void DisplayIslandString();
-        void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters);
+        void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters); // Parameters for all animals of a type in cell
         void LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters);
         Position[] GetSurroundingCells(Position cellPos);
         void Plot();

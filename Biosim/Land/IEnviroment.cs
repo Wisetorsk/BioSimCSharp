@@ -28,6 +28,8 @@ namespace Biosim.Land
         double CarnivoreAvgWeight { get; }
         double HerbivoreAvgAge { get; }
         double CarnivoreAvgAge { get; }
+        int TotalCarnivoreLives { get; set; }
+        int TotalHerbivoreLives { get; set; }
         EnvParams Params { get; set; }
 
         void HerbivoreFeedingCycle();

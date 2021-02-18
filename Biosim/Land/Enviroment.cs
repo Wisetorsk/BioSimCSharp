@@ -39,6 +39,9 @@ namespace Biosim.Land
 
         public double CarnivoreAvgAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Average() : 0;
 
+        public int TotalCarnivoreLives { get; set; } = 0;
+        public int TotalHerbivoreLives { get; set; } = 0;
+
         // Constructor & Overloads
 
         public Enviroment(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null)
@@ -60,6 +63,8 @@ namespace Biosim.Land
             {
                 Carnivores = initialCarnivores;
             }
+            TotalHerbivoreLives = Herbivores.Count();
+            TotalCarnivoreLives = Carnivores.Count();
         }
 
         public void HerbivoreFeedingCycle()
@@ -115,6 +120,7 @@ namespace Biosim.Land
                 Herbivores.Add(child);
             }
             NewHerbivores = newbornHerbivores.Count();
+            TotalHerbivoreLives += newbornHerbivores.Count();
 
             Carnivores = Carnivores.OrderBy(i => i.Fitness).ToList();
             var numCarn = Carnivores.Count();
@@ -131,6 +137,7 @@ namespace Biosim.Land
                 Carnivores.Add(child);
             }
             NewCarnivores = newbornCarnivores.Count();
+            TotalCarnivoreLives += newbornCarnivores.Count();
         }
 
         public void AgeCycle()
