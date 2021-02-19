@@ -58,7 +58,7 @@ namespace BiosimTests
             Assert.True(initialFitness < testCarn.Fitness);
         }
 
-
+        /*
         [Theory]
         [InlineData(5)]
         [InlineData(1)]
@@ -67,7 +67,7 @@ namespace BiosimTests
         {
             
         }
-
+        */
 
     }
 }

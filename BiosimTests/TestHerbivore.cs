@@ -219,7 +219,12 @@ namespace BiosimTests
             /*Assert that the offspring of a herbivore inherits a 
              * parameter object with type HerbivoreParams and has the same values as the mother
                while also not being the same actual object (reference/pointer) */
-            Assert.method(logical);
+            var rng = new Random();
+            var testHerb = new Herbivore(rng) { Weight = 50, Age = 5 }; // High Fitness
+            var defaultParams = testHerb.Params;
+            testHerb.Params.Gamma = 10;
+            var offspring = testHerb.Birth(20);
+            Assert.NotEqual(offspring.Params, defaultParams);
         }
 
     }

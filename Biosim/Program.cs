@@ -15,7 +15,7 @@ namespace Biosim
     {
         public static Random rng;
         public static Dictionary<string, string> cellTypes = new Dictionary<string, string>() {
-                { "D", "Desert" },
+                {"D", "Desert" },
                 {"S", "Savannah" },
                 {"J", "Jungle" },
                 {"M", "Mountain" },

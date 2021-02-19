@@ -11,7 +11,7 @@ namespace Biosim.Land
 
         // Fields
 
-        // Properties {get; set;}
+        // Properties
         public Random Rng { get; set; }
         public bool Passable { get; set; } = false;
         public Position Pos { get; set; }
@@ -30,15 +30,10 @@ namespace Biosim.Land
         public double HerbivoreAvgFitness => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Fitness).Average() : 0;
         public double CarnivoreAvgFitness => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Fitness).Average() : 0;
         public EnvParams Params { get; set; }
-
         public double HerbivoreAvgWeight => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Weight).Average() : 0;
-
         public double CarnivoreAvgWeight => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Weight).Average() : 0;
-
         public double HerbivoreAvgAge => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Age).Average() : 0;
-
         public double CarnivoreAvgAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Average() : 0;
-
         public int TotalCarnivoreLives { get; set; } = 0;
         public int TotalHerbivoreLives { get; set; } = 0;
 
@@ -222,11 +217,13 @@ namespace Biosim.Land
 
         public void OverloadAllHerbivores(HerbivoreParams parameters)
         {
+            // Implement parameter cloning!!!
             Herbivores.ForEach(i => i.Params = parameters);
         }
 
         public void OverloadAllCarnivores(CarnivoreParams parameters)
         {
+            // Implement parameter cloning!!!
             Carnivores.ForEach(i => i.Params = parameters);
         }
 
@@ -253,53 +250,30 @@ namespace Biosim.Land
     public class Desert : Enviroment
     {
 
-        // Fields
-
-        // Properties {get; set;}
-
-        // Constructor & Overloads
-
         public Desert(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;
         }
 
-        // Methods
-
     }
 
     public class Ocean : Enviroment
     {
-
-        // Fields
-
-        // Properties {get; set;}
-
-        // Constructor & Overloads
-
         public Ocean(Position pos, Random rng) : base(pos, rng)
         {
 
         }
 
-        // Methods
     }
 
     public class Mountain : Enviroment
     {
-
-        // Fields
-
-        // Properties {get; set;}
-
-        // Constructor & Overloads
 
         public Mountain(Position pos, Random rng) : base(pos, rng)
         {
 
         }
 
-        // Methods
     }
 
     public class Savannah : Enviroment
@@ -311,7 +285,6 @@ namespace Biosim.Land
             Params = new SavannahParams();
         }
 
-        // Methods
         public override void GrowFood()
         {
             Food += Params.Alpha * (Params.Fmax - Food);
@@ -326,7 +299,6 @@ namespace Biosim.Land
             Params = new JungleParams();
         }
 
-        // Methods
         public override void GrowFood()
         {
             Food = Params.Fmax;
