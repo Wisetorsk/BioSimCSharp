@@ -213,5 +213,14 @@ namespace BiosimTests
         }
 
 
+        [Fact]
+        public void HerbivoreParmeterInheretanceTest()
+        {
+            /*Assert that the offspring of a herbivore inherits a 
+             * parameter object with type HerbivoreParams and has the same values as the mother
+               while also not being the same actual object (reference/pointer) */
+            Assert.method(logical);
+        }
+
     }
 }
