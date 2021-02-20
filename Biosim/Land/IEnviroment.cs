@@ -3,6 +3,7 @@ using Biosim.Parameters;
 using Biosim.Land;
 using System.Collections.Generic;
 using System.Linq;
+using Biosim.Simulation;
 
 namespace Biosim.Land
 {
@@ -30,8 +31,16 @@ namespace Biosim.Land
         double CarnivoreAvgAge { get; }
         int TotalCarnivoreLives { get; set; }
         int TotalHerbivoreLives { get; set; }
+        double PeakHerbivoreFitness { get; set; }
+        double PeakCarnivoreFitness { get; set; }
+        double PeakHerbivoreAge { get; set; }
+        double PeakCarnivoreAge { get; set; }
+        double PeakHerbivoreWeight { get; set; }
+        double PeakCarnivoreWeight { get; set; }
         EnvParams Params { get; set; }
 
+        void LogData(LogWriter logger);
+        void SetPeakValues();
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
         void DeathCycle();

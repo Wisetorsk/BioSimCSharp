@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Biosim.Animals;
 using Biosim.Parameters;
+using Biosim.Simulation;
 
 namespace Biosim.Land
 {
@@ -36,6 +37,12 @@ namespace Biosim.Land
         public double CarnivoreAvgAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Average() : 0;
         public int TotalCarnivoreLives { get; set; } = 0;
         public int TotalHerbivoreLives { get; set; } = 0;
+        public double PeakHerbivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakCarnivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakHerbivoreAge { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakCarnivoreAge { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakHerbivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakCarnivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         // Constructor & Overloads
 
@@ -242,6 +249,16 @@ namespace Biosim.Land
                 return;
             }
             throw new Exception($"Unable to overload parameters. \nInput was: INDEX - {index} TYPE - {type} PARAMETERS - {parameters}");
+        }
+
+        public void LogData(LogWriter logger)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPeakValues()
+        {
+            throw new NotImplementedException();
         }
 
         // Methods

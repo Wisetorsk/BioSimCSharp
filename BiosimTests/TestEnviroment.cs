@@ -13,6 +13,7 @@ namespace BiosimTests
         public static Random rng = new Random();
         public static List<Carnivore> testCarns = Enumerable.Range(0, 100).Select(i => new Carnivore(rng)).ToList();
         public static List<Herbivore> testHerbs = Enumerable.Range(0, 100).Select(i => new Herbivore(rng)).ToList();
+        
         [Fact]
         public void MigrationResetTest()
         {
@@ -24,6 +25,40 @@ namespace BiosimTests
             int migrated = env.Herbivores.Where(i => i.Migrated).Count();
             env.ResetMigrationParameter();
             Assert.NotEqual(migrated, env.Herbivores.Where(i => i.Migrated).Count());
+        }
+
+        [Fact]
+        public void ParametersAreUniqueObjectsTest()
+        {
+            bool good = true;
+            foreach (var herbA in testHerbs)
+            {
+                var baseParams = herbA.Params;
+                foreach (var herbB in testHerbs)
+                {
+                    if (herbA == herbB) continue;
+                    if (baseParams == herbB.Params)
+                    {
+                        good = false; // Found two equal param references!!! ISSUE!
+                        
+                    }
+                }
+            }
+
+            foreach (var carnA in testHerbs)
+            {
+                var baseParams = carnA.Params;
+                foreach (var carnB in testHerbs)
+                {
+                    if (carnA == carnB) continue;
+                    if (baseParams == carnB.Params)
+                    {
+                        good = false; // Found two equal param references!!! ISSUE!
+
+                    }
+                }
+            }
+            Assert.True(good);
         }
     }
 }

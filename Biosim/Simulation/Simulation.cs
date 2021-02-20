@@ -34,6 +34,31 @@ namespace Biosim.Simulation
         public Random Rng { get; set; }
         public LogWriter Logger { get; set; }
         public Position Dimentions { get; set; }
+        public int TotalDeadHerbivores { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int TotalDeadCarnivores { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int DeadHerbivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int DeadCarnivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public double AverageHerbivoreFitness => throw new NotImplementedException();
+
+        public double AverageCarnivoreFitness => throw new NotImplementedException();
+
+        public double AverageHerbivoreAge => throw new NotImplementedException();
+
+        public double AverageCarnivoreAge => throw new NotImplementedException();
+
+        public double AverageHerbivoreWeight => throw new NotImplementedException();
+
+        public double AverageCarnivoreWeight => throw new NotImplementedException();
+
+        public double PeakHerbiovreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakCarnivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakHerbivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakCarnivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int HerbivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int CarnivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int TotalHerbivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int TotalCarnivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
@@ -110,7 +135,13 @@ namespace Biosim.Simulation
 
         public void Death()
         {
-            throw new NotImplementedException();
+            foreach (var line in Land)
+            {
+                foreach (var cell in line)
+                {
+                    cell.DeathCycle();
+                }
+            }
         }
 
         public void DisplayIslandString()
@@ -120,7 +151,14 @@ namespace Biosim.Simulation
 
         public void Feed()
         {
-            throw new NotImplementedException();
+            foreach (var line in Land)
+            {
+                foreach (var cell in line)
+                {
+                    cell.HerbivoreFeedingCycle();
+                    cell.CarnivoreFeedingCycle();
+                }
+            }
         }
 
         public Position[] GetSurroundingCells(Position cellPos)
@@ -144,28 +182,86 @@ namespace Biosim.Simulation
 
         public void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters)
         {
-            throw new NotImplementedException();
+            if (parameters.GetType().Name == "HerbivoreParams")
+            {
+                Land[cellPos.x][cellPos.y].Herbivores.ForEach(i => i.Params = parameters);
+                return;
+            }
+            if (parameters.GetType().Name == "CarnivoreParams")
+            {
+                Land[cellPos.x][cellPos.y].Carnivores.ForEach(i => i.Params = parameters);
+            }
+
+            
         }
 
-        public void LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters)
+        public bool LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters)
         {
-            throw new NotImplementedException();
+            /*Find the animal*/
+            foreach (var line in Land)
+            {
+                foreach (var cell in line)
+                {
+                    foreach (var herb in cell.Herbivores)
+                    {
+                        if (herb == animal)
+                        {
+                            herb.Params = parameters;
+                            return true;
+                        }
+                    }
+                    foreach (var carn in cell.Carnivores)
+                    {
+                        if (carn == animal)
+                        {
+                            carn.Params = parameters;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
-        public void Migrate()
+        public string Migrate(IEnviroment cell)
+        {
+            /*
+            Get the new layout of animal populations based on the enviroments methods goveringin what animals want to move, and to what cell they want to move to
+            Create a "second" island*/
+            var surrounding = GetSurroundingCells(cell.Pos);
+            return "Migration Result";
+        }
+
+        public string OneYear()
         {
             for (int i = 0; i < Dimentions.x; i++)
             {
                 for (int j = 0; j < Dimentions.y; j++)
                 {
-
+                    var cell = Land[i][j];
+                    string firstHalfResult = OneCellYearFirstHalf(cell);
+                    string migrationResult = Migrate(cell);
+                    string secondHalfResult = OneCellYearSecondHalf(cell);
                 }
             }
+            return "TOTAL RESULT";
         }
-
-        public void OneYear()
+        public string OneCellYearFirstHalf(IEnviroment cell)
         {
-            throw new NotImplementedException();
+            //GrowFood();
+            //HerbivoreFeedingCycle();
+            //CarnivoreFeedingCycle();
+            //BirthCycle();
+            return "";
+        }
+        public string OneCellYearSecondHalf(IEnviroment cell)
+        {
+            //AgeCycle();
+            //WeightLossCycle();
+            //DeathCycle();
+            //RemoveDeadIndividuals();
+            //ResetGivenBirthParameter();
+            return "";
         }
 
         public void Plot()
@@ -192,6 +288,11 @@ namespace Biosim.Simulation
         public override string ToString()
         {
             return TemplateString;
+        }
+
+        public void MoveAnimals()
+        {
+            throw new NotImplementedException();
         }
     }
 }
