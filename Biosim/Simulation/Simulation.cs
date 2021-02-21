@@ -230,6 +230,7 @@ namespace Biosim.Simulation
             /*
             Get the new layout of animal populations based on the enviroments methods goveringin what animals want to move, and to what cell they want to move to
             Create a "second" island*/
+            if (NoMigration) return "Migration disabled";
             var surrounding = GetSurroundingCells(cell.Pos);
             return "Migration Result";
         }
