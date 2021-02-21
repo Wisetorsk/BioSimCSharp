@@ -12,10 +12,11 @@ namespace Biosim.Simulation
     public class Sim : ISimulation
 
     {
-        public Sim(string filepath,  int yearsToSimulate = 100, string template = null)
+        public Sim(string filepath, int yearsToSimulate = 100, string template = null, bool noMigration = false)
         {
             Rng = new Random();
             Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
+            NoMigration = noMigration;
             YearsToSimulate = yearsToSimulate;
             if (template is null)
             {
@@ -24,10 +25,11 @@ namespace Biosim.Simulation
             {
                 TemplateString = template;
             }
-            Dimentions = Build();
+            Dimentions = Build(); // Builds the "Land" prop and returns it's dimentions as object.
         }
 
         public int YearsToSimulate { get; set; }
+        public bool NoMigration { get; set; }
         public string TemplateString { get; set; }
         public List<List<IEnviroment>> Land { get; set; }
         public Position DefaultDim { get; set; } = new Position { x = 10, y = 10 };

@@ -9,6 +9,7 @@ namespace Biosim.Simulation
     internal interface ISimulation
     {
         string TemplateString { get; set; }
+        bool NoMigration { get; set; }
         List<List<IEnviroment>> Land { get; set; } // Nested List
         Position DefaultDim { get; set; }
         int YearsToSimulate { get; set; }
