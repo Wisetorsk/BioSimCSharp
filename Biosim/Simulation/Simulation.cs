@@ -54,6 +54,11 @@ namespace Biosim.Simulation
         public int CarnivoresBornThisYear => Land.Select(i => i.Select(j => j.NewCarnivores).Sum()).Sum();
         public int TotalHerbivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int TotalCarnivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int CurrentYear { get; set; } = 0;
+
+        public int LiveHerbivores => Land.Select(i => i.Select(j => j.NumberOfHerbivores).Sum()).Sum();
+
+        public int LiveCarnivores => Land.Select(i => i.Select(j => j.NumberOfCarnivores).Sum()).Sum();
 
         public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
@@ -109,7 +114,7 @@ namespace Biosim.Simulation
             Land = new List<List<IEnviroment>>();
             var lines = TemplateString.Split('\n');
             var xDim = lines.Length;
-            var yDim = lines[0].Length-1;
+            var yDim = lines[0].Length;
             for (int i = 0; i < lines.Length; i++)
             {
                 List<IEnviroment> islandLine = new List<IEnviroment>();
@@ -259,6 +264,7 @@ namespace Biosim.Simulation
                     //Save Log info here.
                 }
             }
+            CurrentYear++;
         }
 
         public string GetCellInformation(IEnviroment cell)
@@ -312,6 +318,19 @@ namespace Biosim.Simulation
         public void MoveAnimals()
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateStatTrackers()
+        {
+            //DeadHerbivoresThisYear;
+            //DeadCarnivoresThisYear;
+            //HerbivoresBornThisYear;
+            //CarnivoresBornThisYear;
+
+            //TotalCarnivoresCreated += Land.Select(i => i.Select(j => j.));
+            //TotalHerbivoresCreated;
+            //TotalDeadCarnivores;
+            //TotalDeadHerbivores;
         }
     }
 }

@@ -34,13 +34,16 @@ namespace Biosim.Simulation
         double PeakCarnivoreFitness { get; }
         double PeakHerbivoreWeight { get; }
         double PeakCarnivoreWeight { get; }
-
+        int CurrentYear { get; set; }
+        int LiveHerbivores { get; }
+        int LiveCarnivores { get; }
 
         Position Build();
         void Migrate(IEnviroment cell);
         void Death();
         void Feed();
         void Age();
+        void UpdateStatTrackers();
         void AddAnimals(List<IAnimal> animals, Position cellPosition);
         void AddHerbivore(int age, double w, Position cellPosition, IAnimalParams par);
         void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par);

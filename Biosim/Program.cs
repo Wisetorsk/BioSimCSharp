@@ -24,7 +24,7 @@ namespace Biosim
 
         static void Main(string[] args)
         {
-            //SingleCellSimulation(args);
+            //SingleCellSimulation(args); //This one will give you some nice output too!
             TryOutSimulationClass();
             Console.ReadLine();
         }
@@ -33,6 +33,7 @@ namespace Biosim
         {
             var sim = new Sim("", 1000, "JJJ\nSSS\nJJJ");
             sim.Build();
+            sim.NoMigration = true;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -47,6 +48,15 @@ namespace Biosim
                     
                 }
             }
+            for (int i = 0; i < 1000; i++)
+            {
+                sim.OneYear();
+                if (i % 20 == 0)
+                {
+                    Console.WriteLine("20 years passed");
+                }
+            }
+            //sim.OneYear();
             Console.WriteLine("Added animals");
         }
 
