@@ -40,23 +40,16 @@ namespace Biosim.Simulation
         public int TotalDeadCarnivores { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int DeadHerbivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int DeadCarnivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public double AverageHerbivoreFitness => Land.Select(i => i.Select(j => j.HerbivoreAvgFitness).Average()).Average();
-
         public double AverageCarnivoreFitness => Land.Select(i => i.Select(j => j.CarnivoreAvgFitness).Average()).Average();
-
         public double AverageHerbivoreAge => Land.Select(i => i.Select(j => j.HerbivoreAvgAge).Average()).Average();
-
         public double AverageCarnivoreAge => Land.Select(i => i.Select(j => j.CarnivoreAvgAge).Average()).Average();
-
         public double AverageHerbivoreWeight => Land.Select(i => i.Select(j => j.HerbivoreAvgWeight).Average()).Average();
-
         public double AverageCarnivoreWeight => Land.Select(i => i.Select(j => j.CarnivoreAvgWeight).Average()).Average();
-
-        public double PeakHerbiovreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakCarnivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakHerbivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakCarnivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakHerbiovreFitness => Land.Select(i => i.Select(j => j.PeakHerbivoreFitness).Max()).Max();
+        public double PeakCarnivoreFitness => Land.Select(i => i.Select(j => j.PeakCarnivoreFitness).Max()).Max();
+        public double PeakHerbivoreWeight => Land.Select(i => i.Select(j => j.PeakHerbivoreWeight).Max()).Max();
+        public double PeakCarnivoreWeight => Land.Select(i => i.Select(j => j.PeakCarnivoreWeight).Max()).Max();
         public int HerbivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int CarnivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int TotalHerbivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

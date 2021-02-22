@@ -30,10 +30,10 @@ namespace Biosim.Simulation
         double AverageCarnivoreAge { get; }
         double AverageHerbivoreWeight { get; }
         double AverageCarnivoreWeight { get; }
-        double PeakHerbiovreFitness { get; set; }
-        double PeakCarnivoreFitness { get; set; }
-        double PeakHerbivoreWeight { get; set; }
-        double PeakCarnivoreWeight { get; set; }
+        double PeakHerbiovreFitness { get; }
+        double PeakCarnivoreFitness { get; }
+        double PeakHerbivoreWeight { get; }
+        double PeakCarnivoreWeight { get; }
 
 
         Position Build();
