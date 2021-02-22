@@ -37,12 +37,12 @@ namespace Biosim.Land
         public double CarnivoreAvgAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Average() : 0;
         public int TotalCarnivoreLives { get; set; } = 0;
         public int TotalHerbivoreLives { get; set; } = 0;
-        public double PeakHerbivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakCarnivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakHerbivoreAge { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakCarnivoreAge { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakHerbivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double PeakCarnivoreWeight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double PeakHerbivoreFitness => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Fitness).Max() : 0;
+        public double PeakCarnivoreFitness => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Fitness).Max() : 0;
+        public double PeakHerbivoreAge => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Age).Max() : 0;
+        public double PeakCarnivoreAge => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Age).Max() : 0;
+        public double PeakHerbivoreWeight => (Herbivores.Count() > 0) ? Herbivores.Select(i => i.Weight).Max() : 0;
+        public double PeakCarnivoreWeight => (Carnivores.Count() > 0) ? Carnivores.Select(i => i.Weight).Max() : 0;
 
         // Constructor & Overloads
 
@@ -76,14 +76,6 @@ namespace Biosim.Land
             {
                 Food = herb.Feed(Food);
             }
-        }
-
-        public double[] GetAverageWeight()
-        {
-            return new double[2] {
-                Herbivores.Select(i => i.Weight).Average(),
-                Carnivores.Select(i => i.Weight).Average()
-            };
         }
 
         public void CarnivoreFeedingCycle()
@@ -256,10 +248,6 @@ namespace Biosim.Land
             throw new NotImplementedException();
         }
 
-        public void SetPeakValues()
-        {
-            throw new NotImplementedException();
-        }
 
         // Methods
     }

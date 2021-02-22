@@ -41,17 +41,17 @@ namespace Biosim.Simulation
         public int DeadHerbivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int DeadCarnivoresThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public double AverageHerbivoreFitness => throw new NotImplementedException();
+        public double AverageHerbivoreFitness => Land.Select(i => i.Select(j => j.HerbivoreAvgFitness).Average()).Average();
 
-        public double AverageCarnivoreFitness => throw new NotImplementedException();
+        public double AverageCarnivoreFitness => Land.Select(i => i.Select(j => j.CarnivoreAvgFitness).Average()).Average();
 
-        public double AverageHerbivoreAge => throw new NotImplementedException();
+        public double AverageHerbivoreAge => Land.Select(i => i.Select(j => j.HerbivoreAvgAge).Average()).Average();
 
-        public double AverageCarnivoreAge => throw new NotImplementedException();
+        public double AverageCarnivoreAge => Land.Select(i => i.Select(j => j.CarnivoreAvgAge).Average()).Average();
 
-        public double AverageHerbivoreWeight => throw new NotImplementedException();
+        public double AverageHerbivoreWeight => Land.Select(i => i.Select(j => j.HerbivoreAvgWeight).Average()).Average();
 
-        public double AverageCarnivoreWeight => throw new NotImplementedException();
+        public double AverageCarnivoreWeight => Land.Select(i => i.Select(j => j.CarnivoreAvgWeight).Average()).Average();
 
         public double PeakHerbiovreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public double PeakCarnivoreFitness { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

@@ -105,7 +105,12 @@ namespace Biosim
             Console.WriteLine($"Running simulation for {simYears} Years{((simYears > 300) ? ". Simulations over 300 years may take a long time, please wait." : ".")}");
             var thisCell = new Position { x = 1, y = 1 };
             IEnviroment envi;
-
+            var PHf = new List<double>();
+            var PCf = new List<double>();
+            var PHw = new List<double>();
+            var PCw = new List<double>();
+            var PHa = new List<double>();
+            var PCa = new List<double>();
             switch (type)
             {
                 case "D":
@@ -142,7 +147,13 @@ namespace Biosim
                     if (i == 200) envi.Params.Fmax = 150; // At year 200, decrease total food available
                     if (i == 600) envi.Params.Fmax = 500; // Increase food at year 600
                     envi.DEBUG_OneCycle();
-                    sw.WriteLine($"{i},{envi.NumberOfHerbivores},{envi.NumberOfCarnivores},{envi.HerbivoreAvgFitness.ToString().Replace(',', '.')},{envi.CarnivoreAvgFitness.ToString().Replace(',','.')},{envi.HerbivoreAvgAge},{envi.CarnivoreAvgAge},{envi.HerbivoreAvgWeight},{envi.CarnivoreAvgWeight}");
+                    sw.WriteLine($"{i},{envi.NumberOfHerbivores},{envi.NumberOfCarnivores},{envi.HerbivoreAvgFitness.ToString().Replace(',', '.')},{envi.CarnivoreAvgFitness.ToString().Replace(',','.')},{envi.HerbivoreAvgAge.ToString().Replace(',', '.')},{envi.CarnivoreAvgAge.ToString().Replace(',', '.')},{envi.HerbivoreAvgWeight.ToString().Replace(',', '.')},{envi.CarnivoreAvgWeight.ToString().Replace(',', '.')}");
+                    PHa.Add(envi.PeakHerbivoreAge);
+                    PCa.Add(envi.PeakCarnivoreAge);
+                    PHf.Add(envi.PeakHerbivoreFitness);
+                    PCf.Add(envi.PeakHerbivoreFitness);
+                    PHw.Add(envi.PeakHerbivoreWeight);
+                    PCw.Add(envi.PeakCarnivoreWeight);
                     if (envi.Herbivores.Count() + envi.Carnivores.Count() <= 0) {
                         Console.WriteLine($"All animals have died at year {i}");
                         break;
@@ -152,6 +163,7 @@ namespace Biosim
             Console.WriteLine();
             Console.WriteLine(new string('=', Console.WindowWidth));
             Console.WriteLine($"Total Herbivores created: {envi.TotalHerbivoreLives}\nTotal Carnivores created: {envi.TotalCarnivoreLives}");
+            Console.WriteLine($"Peak Herb fitness - {PHf.Max()}\nPeak Carn fitness - {PCf.Max()}\nPeak Herb weight - {PHw.Max()}\nPeak Carn weight - {PCw.Max()}\nPeak Herb age - {PHa.Max()}\nPeak Carn age - {PCa.Max()}");
         }
 
         

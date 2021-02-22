@@ -40,6 +40,6 @@ try:
                     hspace=.8) 
 	plt.show()
 except Exception as e:
-	print(e)
+	print(e) #To be able to see error messages from external view
 	input()
 

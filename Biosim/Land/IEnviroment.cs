@@ -31,16 +31,15 @@ namespace Biosim.Land
         double CarnivoreAvgAge { get; }
         int TotalCarnivoreLives { get; set; }
         int TotalHerbivoreLives { get; set; }
-        double PeakHerbivoreFitness { get; set; }
-        double PeakCarnivoreFitness { get; set; }
-        double PeakHerbivoreAge { get; set; }
-        double PeakCarnivoreAge { get; set; }
-        double PeakHerbivoreWeight { get; set; }
-        double PeakCarnivoreWeight { get; set; }
+        double PeakHerbivoreFitness { get; }
+        double PeakCarnivoreFitness { get; }
+        double PeakHerbivoreAge { get; }
+        double PeakCarnivoreAge { get; }
+        double PeakHerbivoreWeight { get; }
+        double PeakCarnivoreWeight { get; }
         EnvParams Params { get; set; }
 
         void LogData(LogWriter logger);
-        void SetPeakValues();
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
         void DeathCycle();
@@ -52,7 +51,6 @@ namespace Biosim.Land
         void WeightLossCycle();
         void RemoveDeadIndividuals();
         void DEBUG_OneCycle();
-        double[] GetAverageWeight();
         void OverloadParameters(IAnimal animal, IAnimalParams parameters);
         void OverloadParameters(int index, string type, IAnimalParams parameters);
         void OverloadAllHerbivores(HerbivoreParams parameters);
