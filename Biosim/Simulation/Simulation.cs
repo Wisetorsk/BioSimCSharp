@@ -57,17 +57,35 @@ namespace Biosim.Simulation
 
         public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
-            throw new NotImplementedException();
+            if (animals.Count() <= 0 || animals is null) throw new Exception("You must provide animals to insert");
+            if (animals[0].GetType().Name == "Herbivore")
+            {
+                animals.ForEach(i => Land[cellPosition.x][cellPosition.y].Herbivores.Add((Herbivore)i));
+            } else
+            {
+                animals.ForEach(i => Land[cellPosition.x][cellPosition.y].Carnivores.Add((Carnivore)i));
+            }
+
         }
 
-        public void AddCarnivore(int age, double w, IAnimalParams par, Position cellPosition)
+        public void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par = null)
         {
-            throw new NotImplementedException();
+            Land[cellPosition.x][cellPosition.y].Carnivores.Add(
+                new Carnivore(
+                    Rng,
+                    new Position { x = cellPosition.x, y = cellPosition.y },
+                    par)
+                { Weight=w, Age=age });
         }
 
-        public void AddHerbivore(int age, double w, IAnimalParams par, Position cellPosition)
+        public void AddHerbivore(int age, double w, Position cellPosition, IAnimalParams par = null)
         {
-            throw new NotImplementedException();
+            Land[cellPosition.x][cellPosition.y].Herbivores.Add(
+                new Herbivore(
+                    Rng,
+                    new Position { x = cellPosition.x, y = cellPosition.y },
+                    par)
+                { Weight = w, Age = age });
         }
 
         public void Age()
@@ -218,46 +236,51 @@ namespace Biosim.Simulation
             return false;
         }
 
-        public string Migrate(IEnviroment cell)
+        public void Migrate(IEnviroment cell)
         {
             /*
             Get the new layout of animal populations based on the enviroments methods goveringin what animals want to move, and to what cell they want to move to
             Create a "second" island*/
-            if (NoMigration) return "Migration disabled";
+            if (NoMigration) return;
             var surrounding = GetSurroundingCells(cell.Pos);
-            return "Migration Result";
+            // Migration stuff...
         }
 
-        public string OneYear()
+        public void OneYear()
         {
             for (int i = 0; i < Dimentions.x; i++)
             {
                 for (int j = 0; j < Dimentions.y; j++)
                 {
                     var cell = Land[i][j];
-                    string firstHalfResult = OneCellYearFirstHalf(cell);
-                    string migrationResult = Migrate(cell);
-                    string secondHalfResult = OneCellYearSecondHalf(cell);
+                    OneCellYearFirstHalf(cell);
+                    Migrate(cell);
+                    OneCellYearSecondHalf(cell);
+                    //Save Log info here.
                 }
             }
-            return "TOTAL RESULT";
         }
-        public string OneCellYearFirstHalf(IEnviroment cell)
+
+        public string GetCellInformation(IEnviroment cell)
         {
-            //GrowFood();
-            //HerbivoreFeedingCycle();
-            //CarnivoreFeedingCycle();
-            //BirthCycle();
-            return "";
+            return null;
         }
-        public string OneCellYearSecondHalf(IEnviroment cell)
+
+        public void OneCellYearFirstHalf(IEnviroment cell)
         {
-            //AgeCycle();
-            //WeightLossCycle();
-            //DeathCycle();
-            //RemoveDeadIndividuals();
-            //ResetGivenBirthParameter();
-            return "";
+            cell.GrowFood();
+            cell.HerbivoreFeedingCycle();
+            cell.CarnivoreFeedingCycle();
+            cell.BirthCycle();
+        }
+        public void OneCellYearSecondHalf(IEnviroment cell)
+        {
+            cell.AgeCycle();
+            cell.WeightLossCycle();
+            cell.DeathCycle();
+            cell.RemoveDeadIndividuals();
+            cell.ResetGivenBirthParameter();
+            cell.ResetMigrationParameter();
         }
 
         public void Plot()

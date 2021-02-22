@@ -37,20 +37,21 @@ namespace Biosim.Simulation
 
 
         Position Build();
-        string Migrate(IEnviroment cell);
+        void Migrate(IEnviroment cell);
         void Death();
         void Feed();
         void Age();
         void AddAnimals(List<IAnimal> animals, Position cellPosition);
-        void AddHerbivore(int age, double w, IAnimalParams par, Position cellPosition);
-        void AddCarnivore(int age, double w, IAnimalParams par, Position cellPosition);
+        void AddHerbivore(int age, double w, Position cellPosition, IAnimalParams par);
+        void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par);
         void RemoveDead();
+        string GetCellInformation(IEnviroment cell);
         void Breed();
         void ResetSeasonalParams();
         void Simulate(int years);
-        string OneCellYearFirstHalf(IEnviroment cell);
-        string OneCellYearSecondHalf(IEnviroment cell);
-        string OneYear(); // Runs the simulation for one year and returns a string of data
+        void OneCellYearFirstHalf(IEnviroment cell);
+        void OneCellYearSecondHalf(IEnviroment cell);
+        void OneYear(); // Runs the simulation for one year and returns a string of data
         void DisplayIslandString();
         void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters); // Parameters for all animals of a type in cell
         bool LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters);

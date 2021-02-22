@@ -24,11 +24,39 @@ namespace Biosim
 
         static void Main(string[] args)
         {
+            //SingleCellSimulation(args);
+            TryOutSimulationClass();
+            Console.ReadLine();
+        }
+
+        private static void TryOutSimulationClass()
+        {
+            var sim = new Sim("", 1000, "JJJ\nSSS\nJJJ");
+            sim.Build();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    var pos = new Position { x = i, y = j };
+                    List<Herbivore> herbs = Enumerable.Range(0, 10).Select(k => new Herbivore(sim.Rng, pos)).ToList();
+                    List<Carnivore> carns = Enumerable.Range(0, 10).Select(k => new Carnivore(sim.Rng, pos)).ToList();
+                    //sim.AddAnimals(carns, pos);  Errors due to "cannot convert from IAnimal
+                    //sim.AddAnimals(herbs, pos);
+                    Enumerable.Range(0, 10).ToList().ForEach(k => sim.AddHerbivore(0, 10, pos));
+                    Enumerable.Range(0, 10).ToList().ForEach(k => sim.AddCarnivore(0, 10, pos));
+                    
+                }
+            }
+            Console.WriteLine("Added animals");
+        }
+
+        private static void SingleCellSimulation(string[] args)
+        {
             int yearsToSimulate = 0;
             string celltype = "J";
             int herbStart = 0;
             int carnStart = 0;
-            
+
             try
             {
                 try
@@ -94,7 +122,7 @@ namespace Biosim
                 Console.WriteLine(e.Message);
             }
 
-            
+
             Console.WriteLine("Press enter to close this window");
             Console.ReadLine();
         }
