@@ -20,8 +20,8 @@ namespace Biosim.Simulation
         int TotalDeadCarnivores { get; set; }
         int DeadHerbivoresThisYear { get; set; }
         int DeadCarnivoresThisYear { get; set; }
-        int HerbivoresBornThisYear { get; set; }
-        int CarnivoresBornThisYear { get; set; }
+        int HerbivoresBornThisYear { get; }
+        int CarnivoresBornThisYear { get; }
         int TotalHerbivoresCreated { get; set; }
         int TotalCarnivoresCreated { get; set; }
         double AverageHerbivoreFitness { get; }

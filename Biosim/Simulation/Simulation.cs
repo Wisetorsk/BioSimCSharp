@@ -50,8 +50,8 @@ namespace Biosim.Simulation
         public double PeakCarnivoreFitness => Land.Select(i => i.Select(j => j.PeakCarnivoreFitness).Max()).Max();
         public double PeakHerbivoreWeight => Land.Select(i => i.Select(j => j.PeakHerbivoreWeight).Max()).Max();
         public double PeakCarnivoreWeight => Land.Select(i => i.Select(j => j.PeakCarnivoreWeight).Max()).Max();
-        public int HerbivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int CarnivoresBornThisYear { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int HerbivoresBornThisYear => Land.Select(i => i.Select(j => j.NewHerbivores).Sum()).Sum();
+        public int CarnivoresBornThisYear => Land.Select(i => i.Select(j => j.NewCarnivores).Sum()).Sum();
         public int TotalHerbivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int TotalCarnivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
