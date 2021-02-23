@@ -31,7 +31,7 @@ namespace Biosim
 
         private static void TryOutSimulationClass()
         {
-            var sim = new Sim("", 1000, "JJJ\nSSS\nJJJ");
+            var sim = new Sim("../../Results/SimResult.csv", 500, "JJJ\nSSS\nJJJ");
             sim.Build();
             sim.NoMigration = true;
             for (int i = 0; i < 3; i++)
@@ -48,7 +48,7 @@ namespace Biosim
                     
                 }
             }
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 sim.OneYear();
                 if (i % 20 == 0)
@@ -56,8 +56,9 @@ namespace Biosim
                     Console.WriteLine("20 years passed");
                 }
             }
-            //sim.OneYear();
-            Console.WriteLine("Added animals");
+            sim.SaveCSV();
+            sim.Plot();
+            Console.WriteLine("Simulation Over");
         }
 
         private static void SingleCellSimulation(string[] args)

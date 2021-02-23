@@ -62,5 +62,6 @@ namespace Biosim.Simulation
         void MoveAnimals(); // Tests must ensure that the animal is actually moved, not copied or replaced with age 0 animal
         void Plot();
         void ChangeCellParameters(Position cellPos, EnvParams newParams);
+        void SaveCSV();
     }
 }

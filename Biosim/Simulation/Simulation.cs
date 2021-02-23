@@ -12,10 +12,10 @@ namespace Biosim.Simulation
     public class Sim : ISimulation
 
     {
-        public Sim(string filepath, int yearsToSimulate = 100, string template = null, bool noMigration = false)
+        public Sim(string filepath="../../Results/SimResult.csv", int yearsToSimulate = 100, string template = null, bool noMigration = false)
         {
             Rng = new Random();
-            Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness");
+            Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness,HerbivoreAvgAge,CarnivoreAvgAge,HerbivoreAvgWeight,CarnivoreAvgWeight,HerbivoresBornThisYear,CarnivoresBornThisYear");
             NoMigration = noMigration;
             YearsToSimulate = yearsToSimulate;
             if (template is null)
@@ -262,8 +262,10 @@ namespace Biosim.Simulation
                     Migrate(cell);
                     OneCellYearSecondHalf(cell);
                     //Save Log info here.
+                    
                 }
             }
+            Logger.Log($"{CurrentYear.ToString().Replace(',','.')},{LiveHerbivores.ToString().Replace(',', '.')},{LiveCarnivores.ToString().Replace(',', '.')},{AverageHerbivoreFitness.ToString().Replace(',', '.')},{AverageCarnivoreFitness.ToString().Replace(',', '.')},{AverageHerbivoreAge.ToString().Replace(',', '.')},{AverageCarnivoreAge.ToString().Replace(',', '.')},{AverageHerbivoreWeight.ToString().Replace(',', '.')},{AverageCarnivoreWeight.ToString().Replace(',', '.')},{HerbivoresBornThisYear.ToString().Replace(',', '.')},{CarnivoresBornThisYear.ToString().Replace(',', '.')}");
             CurrentYear++;
         }
 
@@ -331,6 +333,11 @@ namespace Biosim.Simulation
             //TotalHerbivoresCreated;
             //TotalDeadCarnivores;
             //TotalDeadHerbivores;
+        }
+
+        public void SaveCSV()
+        {
+            Logger.LogCSV();
         }
     }
 }
