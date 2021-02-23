@@ -53,7 +53,7 @@ namespace Biosim.Simulation
         string GetCellInformation(IEnviroment cell);
         void Breed();
         void ResetSeasonalParams();
-        void Simulate(int years);
+        void Simulate();
         void OneCellYearFirstHalf(IEnviroment cell);
         void OneCellYearSecondHalf(IEnviroment cell);
         void OneYear(); // Runs the simulation for one year and returns a string of data

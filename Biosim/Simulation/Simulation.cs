@@ -211,29 +211,24 @@ namespace Biosim.Simulation
             {
                 for (var i = -1; i < 2; i++)
                 {
-                    try
-                    {
-                        if (i != 0 || j != 0)
-                        {
-                            if (cellPos.x + i >= 0 && cellPos.y +j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
-                            {
-                                if (Land[cellPos.x + i][cellPos.y + j].Passable)
-                                {
-                                    cellList.Add(new Position
-                                    {
-                                        x = cellPos.x + i,
-                                        y = cellPos.y + j
-                                    });
-                                }
 
+                    if (i != 0 || j != 0)
+                    {
+                        if (cellPos.x + i >= 0 && cellPos.y +j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
+                        {
+                            if (Land[cellPos.x + i][cellPos.y + j].Passable)
+                            {
+                                cellList.Add(new Position
+                                {
+                                    x = cellPos.x + i,
+                                    y = cellPos.y + j
+                                });
                             }
 
                         }
-                    }
-                    catch
-                    {
 
                     }
+
                 }
             }
             return cellList;
@@ -295,7 +290,7 @@ namespace Biosim.Simulation
 
         public void OneYear()
         {
-            var feedString = "";
+            var feedString = $"{CurrentYear}";
             for (int i = 0; i < Dimentions.x; i++)
             {
                 for (int j = 0; j < Dimentions.y; j++)
@@ -316,7 +311,7 @@ namespace Biosim.Simulation
                     var cell = Land[i][j];
                     OneCellYearSecondHalf(cell);
                     //Save Log info here.
-                    feedString += $"{cell.Food},";
+                    feedString += $",{cell.Food}";
                 }
             }
 
@@ -365,9 +360,27 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void Simulate(int years)
+        public void Simulate()
         { //Runs the simulation for x years
-            throw new NotImplementedException();
+            int ind = 0;
+            int simulated = 0;
+            for (int i = 0; i < YearsToSimulate; i++)
+            {
+                if (LiveHerbivores + LiveCarnivores <= 0) break;
+                OneYear();
+                if (i % 10 == 0)
+                {
+                    int num = ind % 4;
+                    Console.Clear();
+                    Console.WriteLine($"SIMULATION IS NOW RUNNING{new string('.', num)}");
+                    ind += 1;
+                }
+                simulated++;
+            }
+            SaveCSV();
+            Plot();
+            FoodLog.LogCSV(); // Remvove or refactor later
+            Console.WriteLine($"Simulation finished after {simulated} years");
         }
 
         public override string ToString()

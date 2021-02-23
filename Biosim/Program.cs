@@ -34,7 +34,7 @@ namespace Biosim
             var template = "DDDDD\nDSSSD\nDJJJD\nDSSSD\nDDDDD";
             int xDim = template.Split('\n')[0].Length;
             int yDim = template.Split('\n').Length;
-            var sim = new Sim("../../Results/SimResult.csv", 500, template);
+            var sim = new Sim("../../Results/SimResult.csv", 1500, template);
             sim.Build();
             sim.NoMigration = false;
             for (int i = 0; i < xDim; i++)
@@ -53,22 +53,7 @@ namespace Biosim
                     }
                 }
             }
-            int ind = 0;
-            for (int i = 0; i < 1500; i++)
-            {
-                sim.OneYear();
-                if (i%10==0)
-                {
-                    int num = ind % 4;
-                    Console.Clear();
-                    Console.WriteLine($"SIMULATION IS NOW RUNNING{new string('.', num)}");
-                    ind+=1;
-                }
-            }
-            sim.SaveCSV();
-            sim.Plot();
-            sim.FoodLog.LogCSV();
-            Console.WriteLine("Simulation Over");
+            sim.Simulate();
         }
 
         private static void SingleCellSimulation(string[] args)
