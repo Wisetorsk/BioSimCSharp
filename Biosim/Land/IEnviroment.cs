@@ -42,6 +42,7 @@ namespace Biosim.Land
         void LogData(LogWriter logger);
         void HerbivoreFeedingCycle();
         void CarnivoreFeedingCycle();
+        void ResetCurrentYearParameters();
         void DeathCycle();
         void BirthCycle();
         void GrowFood();

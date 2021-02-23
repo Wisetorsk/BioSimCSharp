@@ -12,9 +12,11 @@ namespace Biosim.Simulation
     public class Sim : ISimulation
 
     {
+        public LogWriter FoodLog;
         public Sim(string filepath="../../Results/SimResult.csv", int yearsToSimulate = 100, string template = null, bool noMigration = false)
         {
             Rng = new Random();
+            //FoodLog = new LogWriter(, "year");
             Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness,HerbivoreAvgAge,CarnivoreAvgAge,HerbivoreAvgWeight,CarnivoreAvgWeight,HerbivoresBornThisYear,CarnivoresBornThisYear");
             NoMigration = noMigration;
             YearsToSimulate = yearsToSimulate;
@@ -130,6 +132,7 @@ namespace Biosim.Simulation
         public Position Build()
         {
             Land = new List<List<IEnviroment>>();
+            var logstring = "year";
             var lines = TemplateString.Split('\n');
             var xDim = lines.Length;
             var yDim = lines[0].Length;
@@ -138,6 +141,7 @@ namespace Biosim.Simulation
                 List<IEnviroment> islandLine = new List<IEnviroment>();
                 for (int j = 0; j < lines[i].Length; j++)
                 {
+                    logstring += $",{lines[i][j]}";
                     switch (lines[i][j])
                     {
                         case 'D':
@@ -161,6 +165,7 @@ namespace Biosim.Simulation
                 }
                 Land.Add(islandLine);
             }
+            FoodLog = new LogWriter("../../Results/FoodOverview.csv", logstring);
             return new Position() { x = xDim, y = yDim };
         }
 
@@ -271,6 +276,7 @@ namespace Biosim.Simulation
 
         public void OneYear()
         {
+            var feedString = "";
             for (int i = 0; i < Dimentions.x; i++)
             {
                 for (int j = 0; j < Dimentions.y; j++)
@@ -280,9 +286,10 @@ namespace Biosim.Simulation
                     Migrate(cell);
                     OneCellYearSecondHalf(cell);
                     //Save Log info here.
-                    
+                    feedString += $"{cell.Food},";
                 }
             }
+            FoodLog.Log(feedString);
             Logger.Log($"{CurrentYear.ToString().Replace(',','.')},{LiveHerbivores.ToString().Replace(',', '.')},{LiveCarnivores.ToString().Replace(',', '.')},{AverageHerbivoreFitness.ToString().Replace(',', '.')},{AverageCarnivoreFitness.ToString().Replace(',', '.')},{AverageHerbivoreAge.ToString().Replace(',', '.')},{AverageCarnivoreAge.ToString().Replace(',', '.')},{AverageHerbivoreWeight.ToString().Replace(',', '.')},{AverageCarnivoreWeight.ToString().Replace(',', '.')},{HerbivoresBornThisYear.ToString().Replace(',', '.')},{CarnivoresBornThisYear.ToString().Replace(',', '.')}");
             CurrentYear++;
         }
@@ -294,6 +301,7 @@ namespace Biosim.Simulation
 
         public void OneCellYearFirstHalf(IEnviroment cell)
         {
+            cell.ResetCurrentYearParameters();
             cell.GrowFood();
             cell.HerbivoreFeedingCycle();
             cell.CarnivoreFeedingCycle();
@@ -320,7 +328,7 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void ResetSeasonalParams()
+        public void ResetSeasonalParams() // No longer needed
         {
             throw new NotImplementedException();
         }

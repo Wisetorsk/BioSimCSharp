@@ -87,6 +87,7 @@ namespace Biosim.Land
                 kills += carn.Feed(Herbivores);
             }
             KilledByCarnivores = kills;
+            RemoveDeadIndividuals();
         }
 
         public void DeathCycle()
@@ -148,8 +149,8 @@ namespace Biosim.Land
 
         public void RemoveDeadIndividuals()
         {
-            DeadCarnivores = Carnivores.Where(i => !i.IsAlive).Count();
-            DeadHerbivores = Herbivores.Where(i => !i.IsAlive).Count();
+            DeadCarnivores += Carnivores.Where(i => !i.IsAlive).Count();
+            DeadHerbivores += Herbivores.Where(i => !i.IsAlive).Count();
             List<Herbivore> survivingHerbivores = new List<Herbivore>();
             foreach (var herb in Herbivores)
             {
@@ -169,6 +170,15 @@ namespace Biosim.Land
             }
             Herbivores = survivingHerbivores;
             Carnivores = survivingCarnivores;
+        }
+        
+        public void ResetCurrentYearParameters()
+        {
+            DeadCarnivores = 0;
+            DeadHerbivores = 0;
+            NewCarnivores = 0;
+            NewHerbivores = 0;
+
         }
 
         public int ResetGivenBirthParameter()

@@ -60,5 +60,18 @@ namespace BiosimTests
             }
             Assert.True(good);
         }
+
+
+        [Fact]
+        public void CarnivoresKillHerbivoresTest()
+        {
+            var randomGen = new Random();
+            var herbs = Enumerable.Range(0, 100).Select(i => new Herbivore(randomGen)).ToList();
+            var carns = Enumerable.Range(0, 20).Select(i => new Carnivore(randomGen)).ToList();
+            var cell = new Jungle(new Position { x = 0, y = 0 }, randomGen, herbs, carns);
+            cell.CarnivoreFeedingCycle();
+            Assert.True(cell.Herbivores.Count() < 100);
+        }
+
     }
 }

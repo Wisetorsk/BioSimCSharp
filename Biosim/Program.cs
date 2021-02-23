@@ -31,7 +31,7 @@ namespace Biosim
 
         private static void TryOutSimulationClass()
         {
-            var template = "SSS\nSSS\nSSS";
+            var template = "DDDDD\nDSSSD\nDJJJD\nDSSSD\nDDDDD";
             int xDim = template.Split('\n')[0].Length;
             int yDim = template.Split('\n').Length;
             var sim = new Sim("../../Results/SimResult.csv", 500, template);
@@ -65,6 +65,7 @@ namespace Biosim
             }
             sim.SaveCSV();
             sim.Plot();
+            sim.FoodLog.LogCSV();
             Console.WriteLine("Simulation Over");
         }
 

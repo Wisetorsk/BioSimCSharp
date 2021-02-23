@@ -352,3 +352,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 Biosim/Results/SimResult.csv
+Biosim/Results/FoodOverview.csv

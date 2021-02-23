@@ -160,7 +160,7 @@ namespace Biosim.Parameters
         public override double Zeta { get; set; } = 3.5;
         public override double Xi { get; set; } = 1.1;
         public override double Omega { get; set; } = 0.9;
-        public override double F { get; set; } = 50.0;
+        public override double F { get; set; } = 10.0;
         public override double DeltaPhiMax { get; set; } = .9; //= 10.0;
     }
 
