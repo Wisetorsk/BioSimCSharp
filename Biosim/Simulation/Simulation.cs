@@ -93,6 +93,24 @@ namespace Biosim.Simulation
                 { Weight = w, Age = age });
         }
 
+        public void AddCarnivore(Position cellPosition, IAnimalParams par = null)
+        {
+            Land[cellPosition.x][cellPosition.y].Carnivores.Add(
+                new Carnivore(
+                    Rng,
+                    new Position { x = cellPosition.x, y = cellPosition.y },
+                    par));
+        }
+
+        public void AddHerbivore( Position cellPosition, IAnimalParams par = null)
+        {
+            Land[cellPosition.x][cellPosition.y].Herbivores.Add(
+                new Herbivore(
+                    Rng,
+                    new Position { x = cellPosition.x, y = cellPosition.y },
+                    par));
+        }
+
         public void Age()
         {
             foreach (var row in Land)

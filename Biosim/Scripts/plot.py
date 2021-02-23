@@ -3,12 +3,13 @@ import numpy as np
 import sys
 
 try:
-	data = np.genfromtxt("../../Results/SimResult.csv", delimiter=",", names=["Year", "Herbivores", "Carnivores", "HFitness", "CFitness", "HerbivoreAvgAge", "CarnivoreAvgAge", "HerbivoreAvgWeight", "CarnivoreAvgWeight"])
+	data = np.genfromtxt("../../Results/SimResult.csv", delimiter=",", names=["Year", "Herbivores", "Carnivores", "HFitness", "CFitness", "HerbivoreAvgAge", "CarnivoreAvgAge", "HerbivoreAvgWeight", "CarnivoreAvgWeight","HerbivoreBirths","CarnivoreBirths"])
 	fig = plt.figure(1)
-	ax1 = fig.add_subplot(411)
-	ax2 = fig.add_subplot(412)
-	ax3 = fig.add_subplot(413)
-	ax4 = fig.add_subplot(414)
+	ax1 = fig.add_subplot(511)
+	ax2 = fig.add_subplot(512)
+	ax3 = fig.add_subplot(513)
+	ax4 = fig.add_subplot(514)
+	ax5 = fig.add_subplot(515)
 
 	plt.xlabel('Year')
 
@@ -31,6 +32,11 @@ try:
 	ax4.plot(data["Year"], data["HerbivoreAvgWeight"], label='Herbivore')
 	ax4.plot(data["Year"], data["CarnivoreAvgWeight"], label='Carnivore')
 	ax4.legend()
+
+	ax5.set_title('Births')
+	ax5.plot(data["Year"], data["HerbivoreBirths"], label='Herbivore')
+	ax5.plot(data["Year"], data["CarnivoreBirths"], label='Carnivore')
+	ax5.legend()
 
 	plt.subplots_adjust(left=0.1, 
                     bottom=0.1,  

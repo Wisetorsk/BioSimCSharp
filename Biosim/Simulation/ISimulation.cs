@@ -47,6 +47,8 @@ namespace Biosim.Simulation
         void AddAnimals(List<IAnimal> animals, Position cellPosition);
         void AddHerbivore(int age, double w, Position cellPosition, IAnimalParams par);
         void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par);
+        void AddHerbivore(Position cellPosition, IAnimalParams par);
+        void AddCarnivore(Position cellPosition, IAnimalParams par);
         void RemoveDead();
         string GetCellInformation(IEnviroment cell);
         void Breed();

@@ -31,29 +31,36 @@ namespace Biosim
 
         private static void TryOutSimulationClass()
         {
-            var sim = new Sim("../../Results/SimResult.csv", 500, "JJJ\nSSS\nJJJ");
+            var template = "SSS\nSSS\nSSS";
+            int xDim = template.Split('\n')[0].Length;
+            int yDim = template.Split('\n').Length;
+            var sim = new Sim("../../Results/SimResult.csv", 500, template);
             sim.Build();
             sim.NoMigration = true;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < xDim; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < yDim; j++)
                 {
                     var pos = new Position { x = i, y = j };
                     List<Herbivore> herbs = Enumerable.Range(0, 10).Select(k => new Herbivore(sim.Rng, pos)).ToList();
                     List<Carnivore> carns = Enumerable.Range(0, 10).Select(k => new Carnivore(sim.Rng, pos)).ToList();
                     //sim.AddAnimals(carns, pos);  Errors due to "cannot convert from IAnimal
                     //sim.AddAnimals(herbs, pos);
-                    Enumerable.Range(0, 10).ToList().ForEach(k => sim.AddHerbivore(0, 10, pos));
-                    Enumerable.Range(0, 10).ToList().ForEach(k => sim.AddCarnivore(0, 10, pos));
+                    Enumerable.Range(0, 10).ToList().ForEach(k => sim.AddHerbivore(pos));
+                    Enumerable.Range(0, 3).ToList().ForEach(k => sim.AddCarnivore(pos));
                     
                 }
             }
-            for (int i = 0; i < 100; i++)
+            int ind = 0;
+            for (int i = 0; i < 500; i++)
             {
                 sim.OneYear();
-                if (i % 20 == 0)
+                if (i%10==0)
                 {
-                    Console.WriteLine("20 years passed");
+                    int num = ind % 4;
+                    Console.Clear();
+                    Console.WriteLine($"SIMULATION IS NOW RUNNING{new string('.', num)}");
+                    ind+=1;
                 }
             }
             sim.SaveCSV();
