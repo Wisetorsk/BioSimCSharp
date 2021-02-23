@@ -6,6 +6,7 @@ namespace Biosim.Animals
     {
         int Age { get; set; }
         Position Pos { get; set; }
+        Position GoingToMoveTo { get; set; } // The cell the animal is going to move to under simulation.migration
         double Weight { get; set; }
         double Qplus { get; set; }
         double Qneg { get; set; }

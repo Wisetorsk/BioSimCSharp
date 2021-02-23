@@ -217,11 +217,15 @@ namespace Biosim.Simulation
                         {
                             if (cellPos.x + i >= 0 && cellPos.y +j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
                             {
-                                cellList.Add(new Position
+                                if (Land[cellPos.x + i][cellPos.y + j].Passable)
                                 {
-                                    x = cellPos.x + i,
-                                    y = cellPos.y + j
-                                });
+                                    cellList.Add(new Position
+                                    {
+                                        x = cellPos.x + i,
+                                        y = cellPos.y + j
+                                    });
+                                }
+
                             }
 
                         }
@@ -281,12 +285,12 @@ namespace Biosim.Simulation
         public void Migrate(IEnviroment cell)
         {
             /*
-            Get the new layout of animal populations based on the enviroments methods goveringin what animals want to move, and to what cell they want to move to
-            Create a "second" island*/
+            Gets surrounding cells and feeds them to the individual animals in a cell, the animal then sets a personal parameter indicating what cell it wants to move to*/
             if (NoMigration) return;
             var surrounding = GetSurroundingCells(cell.Pos);
-            Console.WriteLine(surrounding.Count());
-            // Migration stuff...
+            cell.Herbivores.ForEach(i => i.Migrate(surrounding));
+            cell.Carnivores.ForEach(i => i.Migrate(surrounding));
+
         }
 
         public void OneYear()
@@ -299,11 +303,24 @@ namespace Biosim.Simulation
                     var cell = Land[i][j];
                     OneCellYearFirstHalf(cell);
                     Migrate(cell);
+                    
+                }
+            }
+
+            MoveAnimals(); // Do the migration!
+
+            for (int i = 0; i < Dimentions.x; i++)
+            {
+                for (int j = 0; j < Dimentions.y; j++)
+                {
+                    var cell = Land[i][j];
                     OneCellYearSecondHalf(cell);
                     //Save Log info here.
                     feedString += $"{cell.Food},";
                 }
             }
+
+
             FoodLog.Log(feedString);
             Logger.Log($"{CurrentYear.ToString().Replace(',','.')},{LiveHerbivores.ToString().Replace(',', '.')},{LiveCarnivores.ToString().Replace(',', '.')},{AverageHerbivoreFitness.ToString().Replace(',', '.')},{AverageCarnivoreFitness.ToString().Replace(',', '.')},{AverageHerbivoreAge.ToString().Replace(',', '.')},{AverageCarnivoreAge.ToString().Replace(',', '.')},{AverageHerbivoreWeight.ToString().Replace(',', '.')},{AverageCarnivoreWeight.ToString().Replace(',', '.')},{HerbivoresBornThisYear.ToString().Replace(',', '.')},{CarnivoresBornThisYear.ToString().Replace(',', '.')}");
             CurrentYear++;
@@ -360,7 +377,48 @@ namespace Biosim.Simulation
 
         public void MoveAnimals()
         {
-            throw new NotImplementedException();
+            /*
+             Create a layout of animals and positions they wish to move to. 
+             */
+            //Extract all animals into a list
+            List<IAnimal> animals = new List<IAnimal>();
+            foreach (var row in Land)
+            {
+                foreach (var cell in row)
+                {
+                    foreach (var herb in cell.Herbivores)
+                    {
+                        animals.Add(herb);
+                    }
+                    foreach (var carn in cell.Carnivores)
+                    {
+                        animals.Add(carn);
+                    }
+                }
+            }
+
+            // Remove all animals from cells
+            foreach (var row in Land)
+            {
+                foreach (var cell in row)
+                {
+                    cell.Herbivores = new List<Herbivore>();
+                    cell.Carnivores = new List<Carnivore>();
+                }
+            }
+
+            // Place each animal in the cells. This can and should be improved to only moving the animals who's "want to move to" -parameter is not the same as it's position parameter
+            foreach (var animal in animals)
+            {
+                animal.Pos = new Position { x = animal.GoingToMoveTo.x, y = animal.GoingToMoveTo.y };
+                if (animal.GetType().Name == "Herbivore")
+                {
+                    Land[animal.GoingToMoveTo.x][animal.GoingToMoveTo.y].Herbivores.Add((Herbivore)animal);
+                } else
+                {
+                    Land[animal.GoingToMoveTo.x][animal.GoingToMoveTo.y].Carnivores.Add((Carnivore)animal);
+                }
+            }
         }
 
         public void UpdateStatTrackers()

@@ -89,7 +89,7 @@ namespace BiosimTests
         }
 
 
-
+        /* NEEDS REWRITE
         [Fact]
         public void HerbivoreMoveNotNullTest()
         {
@@ -106,7 +106,7 @@ namespace BiosimTests
             Assert.NotNull(left);
             Assert.Equal(Directions.Left, left);
         }
-
+        */
         [Fact]
         public void HerbivoreSetWeightTest()
         {

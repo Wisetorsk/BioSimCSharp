@@ -37,6 +37,7 @@ namespace Biosim.Animals
         public bool IsAlive { get; set; } = true;
         public bool GivenBirth { get; set; } = false;
         public bool Migrated { get; set; } = false;
+        public Position GoingToMoveTo { get; set; }
 
         // Constructors & Overloads
 
@@ -54,17 +55,17 @@ namespace Biosim.Animals
             //Console.WriteLine(rng.NextDouble());
         }
 
-        public Directions? Migrate(Directions[] dir)
+        public void Migrate(List<Position> dir)
         {
             // The animal gets a set of directions it is allowed to move to (based on the passable attribute passed in from the main controller (island)
             if (Fitness * Params.Mu > rng.NextDouble())
             {
                 Migrated = true;
-                return dir[rng.Next(dir.Length)];
+                GoingToMoveTo = dir[rng.Next(dir.Count())];
             }
             else
             {
-                return null;
+                GoingToMoveTo = new Position { x=Pos.x, y=Pos.y };
             }
         }
 
