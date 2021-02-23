@@ -60,7 +60,7 @@ namespace Biosim.Simulation
         void DisplayIslandString();
         void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters); // Parameters for all animals of a type in cell
         bool LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters);
-        Position[] GetSurroundingCells(Position cellPos);
+        List<Position> GetSurroundingCells(Position cellPos);
         void MoveAnimals(); // Tests must ensure that the animal is actually moved, not copied or replaced with age 0 animal
         void Plot();
         void ChangeCellParameters(Position cellPos, EnvParams newParams);

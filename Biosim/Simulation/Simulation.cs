@@ -30,6 +30,7 @@ namespace Biosim.Simulation
             Dimentions = Build(); // Builds the "Land" prop and returns it's dimentions as object.
         }
 
+        #region Properties
         public int YearsToSimulate { get; set; }
         public bool NoMigration { get; set; }
         public string TemplateString { get; set; }
@@ -57,11 +58,11 @@ namespace Biosim.Simulation
         public int TotalHerbivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int TotalCarnivoresCreated { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int CurrentYear { get; set; } = 0;
-
         public int LiveHerbivores => Land.Select(i => i.Select(j => j.NumberOfHerbivores).Sum()).Sum();
-
         public int LiveCarnivores => Land.Select(i => i.Select(j => j.NumberOfCarnivores).Sum()).Sum();
+        #endregion
 
+        #region AddAnimal
         public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
             if (animals.Count() <= 0 || animals is null) throw new Exception("You must provide animals to insert");
@@ -112,7 +113,7 @@ namespace Biosim.Simulation
                     new Position { x = cellPosition.x, y = cellPosition.y },
                     par));
         }
-
+        #endregion
         public void Age()
         {
             foreach (var row in Land)
@@ -202,23 +203,36 @@ namespace Biosim.Simulation
             }
         }
 
-        public Position[] GetSurroundingCells(Position cellPos)
+        public List<Position> GetSurroundingCells(Position cellPos)
         {
-            var neighbors = new List<IEnviroment>();
-            // Rerurns the surrounding cells as array;
-            for (int i = -1; i < 2; i++)
+
+            var cellList = new List<Position>();
+            for (var j = -1; j < 2; j++)
             {
-                for (int j = -1; j < 2; j++)
+                for (var i = -1; i < 2; i++)
                 {
-                    if (cellPos.x + i <= 0 || cellPos.x + i > Dimentions.x) continue;
-                    if (cellPos.y + j <= 0 || cellPos.y + j > Dimentions.y) continue;
-                    if (Land[cellPos.x+i][cellPos.y+j].Passable)
+                    try
                     {
-                        neighbors.Add(Land[cellPos.x + i][cellPos.y + j]);
+                        if (i != 0 || j != 0)
+                        {
+                            if (cellPos.x + i >= 0 && cellPos.y +j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
+                            {
+                                cellList.Add(new Position
+                                {
+                                    x = cellPos.x + i,
+                                    y = cellPos.y + j
+                                });
+                            }
+
+                        }
+                    }
+                    catch
+                    {
+
                     }
                 }
             }
-            return neighbors.Select(k => k.Pos).ToArray();
+            return cellList;
         }
 
         public void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters)
@@ -271,6 +285,7 @@ namespace Biosim.Simulation
             Create a "second" island*/
             if (NoMigration) return;
             var surrounding = GetSurroundingCells(cell.Pos);
+            Console.WriteLine(surrounding.Count());
             // Migration stuff...
         }
 
