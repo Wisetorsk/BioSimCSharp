@@ -353,3 +353,4 @@ MigrationBackup/
 .ionide/
 Biosim/Results/SimResult.csv
 Biosim/Results/FoodOverview.csv
+*.csv
