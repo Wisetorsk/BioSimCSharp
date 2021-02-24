@@ -44,9 +44,9 @@ namespace Biosim
                     if (sim.Land[i][j].Passable)
                     {
                         var pos = new Position { x = i, y = j };
-                        List<Herbivore> herbs = Enumerable.Range(0, 10).Select(k => new Herbivore(sim.Rng, pos)).ToList();
+                        List<Herbivore> herbs = Enumerable.Range(0, 50).Select(k => new Herbivore(sim.Rng, pos)).ToList();
                         List<Carnivore> carns = Enumerable.Range(0, 10).Select(k => new Carnivore(sim.Rng, pos)).ToList();
-                        //sim.AddAnimals(carns, pos);  Errors due to "cannot convert from IAnimal
+                        //sim.AddAnimals(carns, pos);  //Errors due to "cannot convert from IAnimal
                         //sim.AddAnimals(herbs, pos);
                         Enumerable.Range(0, 50).ToList().ForEach(k => sim.AddHerbivore(pos));
                         Enumerable.Range(0, 8).ToList().ForEach(k => sim.AddCarnivore(pos));

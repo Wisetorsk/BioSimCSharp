@@ -66,14 +66,17 @@ namespace Biosim.Simulation
         public void AddAnimals(List<IAnimal> animals, Position cellPosition)
         {
             if (animals.Count() <= 0 || animals is null) throw new Exception("You must provide animals to insert");
-            if (animals[0].GetType().Name == "Herbivore")
-            {
-                animals.ForEach(i => Land[cellPosition.x][cellPosition.y].Herbivores.Add((Herbivore)i));
-            } else
-            {
-                animals.ForEach(i => Land[cellPosition.x][cellPosition.y].Carnivores.Add((Carnivore)i));
-            }
 
+            foreach (var animal in animals)
+            {
+                if (animal.GetType().Name == "Herbivore")
+                {
+                    Land[cellPosition.x][cellPosition.y].Herbivores.Add((Herbivore)animal);
+                } else
+                {
+                    Land[cellPosition.x][cellPosition.y].Carnivores.Add((Carnivore)animal);
+                }
+            }
         }
 
         public void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par = null)
@@ -362,19 +365,13 @@ namespace Biosim.Simulation
 
         public void Simulate()
         { //Runs the simulation for x years
-            int ind = 0;
+            Console.WriteLine($"Running Simulation for {YearsToSimulate} years\nIsland Layout:");
+            Console.WriteLine(TemplateString);
             int simulated = 0;
             for (int i = 0; i < YearsToSimulate; i++)
             {
                 if (LiveHerbivores + LiveCarnivores <= 0) break;
                 OneYear();
-                if (i % 10 == 0)
-                {
-                    int num = ind % 4;
-                    Console.Clear();
-                    Console.WriteLine($"SIMULATION IS NOW RUNNING{new string('.', num)}");
-                    ind += 1;
-                }
                 simulated++;
             }
             SaveCSV();

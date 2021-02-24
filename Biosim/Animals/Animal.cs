@@ -141,7 +141,7 @@ namespace Biosim.Animals
         }
     }
 
-    public class Herbivore : Animal
+    public class Herbivore : Animal, IAnimal
     {
         
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
@@ -168,7 +168,7 @@ namespace Biosim.Animals
         }
     }
 
-    public class Carnivore : Animal
+    public class Carnivore : Animal, IAnimal
     {
         
         public override double Qplus => 1 / (1 + Math.Exp(Params.PhiAge * (Age - Params.AHalf)));
