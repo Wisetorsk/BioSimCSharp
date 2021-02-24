@@ -30,7 +30,7 @@ namespace Biosim
             var template = "OOOOOOO\nODDJDDO\nODSJSDO\nODJJJDO\nODSSSDO\nODDDDDO\nOOOOOOO";
             int xDim = template.Split('\n')[0].Length;
             int yDim = template.Split('\n').Length;
-            var sim = new Sim("../../Results/SimResult.csv", 1500, template);
+            var sim = new Sim(1500, template);
             sim.Build();
             sim.NoMigration = false;
             for (int i = 0; i < xDim; i++)

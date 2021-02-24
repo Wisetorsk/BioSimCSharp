@@ -14,10 +14,11 @@ namespace Biosim.Simulation
         public PopulationMapper HerbivorePopulationMap { get; set; }
         public PopulationMapper CarnivorePopulationMap { get; set; }
 
-        public Sim(string filepath = "../../Results/SimResult.csv", int yearsToSimulate = 100, string template = null, bool noMigration = false)
+        public Sim(int yearsToSimulate = 100, string template = null, bool noMigration = false)
         {
             Rng = new Random();
             //FoodLog = new LogWriter(, "year");
+            string filepath = "../../Results/SimResult.csv";
             HerbivorePopulationMap = new PopulationMapper("HerbivorePopulation", "../../Results");
             CarnivorePopulationMap = new PopulationMapper("CarnivorePopulation", "../../Results");
             Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness,HerbivoreAvgAge,CarnivoreAvgAge,HerbivoreAvgWeight,CarnivoreAvgWeight,HerbivoresBornThisYear,CarnivoresBornThisYear");
