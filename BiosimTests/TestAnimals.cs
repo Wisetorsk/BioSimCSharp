@@ -1,6 +1,4 @@
-﻿using System;
-using Xunit;
-using Biosim.Animals;
+﻿using Xunit;
 
 
 namespace BiosimTests
@@ -10,7 +8,7 @@ namespace BiosimTests
         [Fact]
         public void Test()
         {
-            
+
         }
     }
 }

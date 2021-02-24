@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Biosim.Animals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Biosim.Animals;
-using Biosim.Land;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Biosim.Parameters
 {

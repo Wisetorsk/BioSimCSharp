@@ -1,8 +1,8 @@
-﻿using Biosim.Land;
-using Biosim.Animals;
+﻿using Biosim.Animals;
+using Biosim.Land;
 using Biosim.Parameters;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Biosim.Simulation
 {
@@ -40,8 +40,6 @@ namespace Biosim.Simulation
 
         Position Build();
         void Migrate(IEnviroment cell);
-        void Death();
-        void Feed();
         void Age();
         void UpdateStatTrackers();
         void AddAnimals(List<IAnimal> animals, Position cellPosition);
@@ -49,15 +47,12 @@ namespace Biosim.Simulation
         void AddCarnivore(int age, double w, Position cellPosition, IAnimalParams par);
         void AddHerbivore(Position cellPosition, IAnimalParams par);
         void AddCarnivore(Position cellPosition, IAnimalParams par);
-        void RemoveDead();
         string GetCellInformation(IEnviroment cell);
-        void Breed();
         void ResetSeasonalParams();
         void Simulate();
         void OneCellYearFirstHalf(IEnviroment cell);
         void OneCellYearSecondHalf(IEnviroment cell);
         void OneYear(); // Runs the simulation for one year and returns a string of data
-        void DisplayIslandString();
         void LoadCustomOnCellParameters(Position cellPos, IAnimalParams parameters); // Parameters for all animals of a type in cell
         bool LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters);
         List<Position> GetSurroundingCells(Position cellPos);

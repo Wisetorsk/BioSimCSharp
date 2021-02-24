@@ -1,9 +1,7 @@
 ﻿using Biosim.Animals;
 using Biosim.Parameters;
-using Biosim.Land;
-using System.Collections.Generic;
-using System.Linq;
 using Biosim.Simulation;
+using System.Collections.Generic;
 
 namespace Biosim.Land
 {

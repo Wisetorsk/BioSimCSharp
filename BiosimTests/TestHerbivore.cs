@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Biosim.Animals;
+using Biosim.Parameters;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using Biosim.Animals;
-using Biosim.Parameters;
-using System.Collections.Generic;
 
 namespace BiosimTests
 {
     public class TestHerbivore
     {
-        public static Position testCoor = new Position {x = 1, y = 1};
+        public static Position testCoor = new Position { x = 1, y = 1 };
 
         [Fact]
         public void HerbivoreFeedReducesAmountTest()
@@ -156,7 +156,7 @@ namespace BiosimTests
                 testHerbivore.Death();
                 results.Add(testHerbivore.IsAlive);
             }
-            var dead = results.Where(i => !i).Count()/(double)results.Count()*100.0;
+            var dead = results.Where(i => !i).Count() / (double)results.Count() * 100.0;
             Assert.True(dead < 1); // Less than 1% of all individuals die
         }
 
@@ -204,7 +204,7 @@ namespace BiosimTests
         public void FeedingUpdatesFitnessTest()
         {
             var rng = new Random();
-            var testHerb = new Herbivore(rng) { Weight = 5, Age=50 };
+            var testHerb = new Herbivore(rng) { Weight = 5, Age = 50 };
             var initialF = testHerb.Fitness;
             var food = 100.0;
             testHerb.Feed(food);

@@ -1,8 +1,8 @@
-﻿using System;
-using Xunit;
-using Biosim.Animals;
+﻿using Biosim.Animals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace BiosimTests
 {
@@ -17,7 +17,7 @@ namespace BiosimTests
             var herbs = new List<Herbivore>();
             for (int i = 0; i < 10; i++)
             {
-                herbs.Add(new Herbivore(rng){ Age = 90, Weight = 5}); // Add ten old herbivores
+                herbs.Add(new Herbivore(rng) { Age = 90, Weight = 5 }); // Add ten old herbivores
             }
             var initialW = testCarn.Weight;
             testCarn.Params.F = 10.0; // Set "Hunger" to two herbivores
@@ -30,7 +30,7 @@ namespace BiosimTests
         public void CarnivoreFeedingInceaseWeightTest()
         {
             var rng = new Random();
-            var testCarn = new Carnivore(rng) { Age = 5, Weight = 60}; // Healthy Carnivore
+            var testCarn = new Carnivore(rng) { Age = 5, Weight = 60 }; // Healthy Carnivore
             testCarn.Params.DeltaPhiMax = 0;
             var herbs = new List<Herbivore>();
             for (int i = 0; i < 100; i++)

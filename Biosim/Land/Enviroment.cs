@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Biosim.Animals;
+﻿using Biosim.Animals;
 using Biosim.Parameters;
 using Biosim.Simulation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Biosim.Land
 {
@@ -50,10 +50,11 @@ namespace Biosim.Land
         {
             Rng = rng;
             Pos = pos;
-            if(initialHerbivores is null)
+            if (initialHerbivores is null)
             {
                 Herbivores = new List<Herbivore>();
-            } else
+            }
+            else
             {
                 Herbivores = initialHerbivores;
             }
@@ -61,7 +62,8 @@ namespace Biosim.Land
             if (initialCarnivores is null)
             {
                 Carnivores = new List<Carnivore>();
-            } else
+            }
+            else
             {
                 Carnivores = initialCarnivores;
             }
@@ -122,7 +124,7 @@ namespace Biosim.Land
             foreach (var carn in Carnivores)
             {
                 var result = carn.Birth(numCarn);
-                if (!(result is null)) 
+                if (!(result is null))
                 {
                     newbornCarnivores.Add((Carnivore)result);
                 }
@@ -171,7 +173,7 @@ namespace Biosim.Land
             Herbivores = survivingHerbivores;
             Carnivores = survivingCarnivores;
         }
-        
+
         public void ResetCurrentYearParameters()
         {
             DeadCarnivores = 0;
@@ -191,7 +193,7 @@ namespace Biosim.Land
 
         public virtual void GrowFood()
         {
-            
+
         }
 
         public int ResetMigrationParameter()
@@ -293,7 +295,7 @@ namespace Biosim.Land
 
     public class Savannah : Enviroment
     {
-        
+
         public Savannah(Position pos, Random rng, List<Herbivore> initialHerbivores = null, List<Carnivore> initialCarnivores = null) : base(pos, rng, initialHerbivores, initialCarnivores)
         {
             Passable = true;

@@ -1,5 +1,3 @@
-using System;
-
 namespace BioSimWebInterface.Models
 {
     public class ErrorViewModel

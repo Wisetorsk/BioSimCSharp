@@ -4,8 +4,6 @@ using Biosim.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Biosim.Simulation
 {
@@ -13,17 +11,23 @@ namespace Biosim.Simulation
 
     {
         public LogWriter FoodLog;
-        public Sim(string filepath="../../Results/SimResult.csv", int yearsToSimulate = 100, string template = null, bool noMigration = false)
+        public PopulationMapper HerbivorePopulationMap { get; set; }
+        public PopulationMapper CarnivorePopulationMap { get; set; }
+
+        public Sim(string filepath = "../../Results/SimResult.csv", int yearsToSimulate = 100, string template = null, bool noMigration = false)
         {
             Rng = new Random();
             //FoodLog = new LogWriter(, "year");
+            HerbivorePopulationMap = new PopulationMapper("HerbivorePopulation", "../../Results");
+            CarnivorePopulationMap = new PopulationMapper("CarnivorePopulation", "../../Results");
             Logger = new LogWriter(filepath, "Year,Herbivores,Carnivores,HerbivoreAvgFitness,CarnivoreAvgFitness,HerbivoreAvgAge,CarnivoreAvgAge,HerbivoreAvgWeight,CarnivoreAvgWeight,HerbivoresBornThisYear,CarnivoresBornThisYear");
             NoMigration = noMigration;
             YearsToSimulate = yearsToSimulate;
             if (template is null)
             {
                 TemplateString = DefaultParameters.DefaultIsland;
-            } else
+            }
+            else
             {
                 TemplateString = template;
             }
@@ -72,7 +76,8 @@ namespace Biosim.Simulation
                 if (animal.GetType().Name == "Herbivore")
                 {
                     Land[cellPosition.x][cellPosition.y].Herbivores.Add((Herbivore)animal);
-                } else
+                }
+                else
                 {
                     Land[cellPosition.x][cellPosition.y].Carnivores.Add((Carnivore)animal);
                 }
@@ -86,7 +91,7 @@ namespace Biosim.Simulation
                     Rng,
                     new Position { x = cellPosition.x, y = cellPosition.y },
                     par)
-                { Weight=w, Age=age });
+                { Weight = w, Age = age });
         }
 
         public void AddHerbivore(int age, double w, Position cellPosition, IAnimalParams par = null)
@@ -108,7 +113,7 @@ namespace Biosim.Simulation
                     par));
         }
 
-        public void AddHerbivore( Position cellPosition, IAnimalParams par = null)
+        public void AddHerbivore(Position cellPosition, IAnimalParams par = null)
         {
             Land[cellPosition.x][cellPosition.y].Herbivores.Add(
                 new Herbivore(
@@ -126,11 +131,6 @@ namespace Biosim.Simulation
                     cell.AgeCycle();
                 }
             }
-        }
-
-        public void Breed()
-        {
-            throw new NotImplementedException();
         }
 
         public Position Build()
@@ -178,34 +178,6 @@ namespace Biosim.Simulation
             throw new NotImplementedException();
         }
 
-        public void Death()
-        {
-            foreach (var line in Land)
-            {
-                foreach (var cell in line)
-                {
-                    cell.DeathCycle();
-                }
-            }
-        }
-
-        public void DisplayIslandString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Feed()
-        {
-            foreach (var line in Land)
-            {
-                foreach (var cell in line)
-                {
-                    cell.HerbivoreFeedingCycle();
-                    cell.CarnivoreFeedingCycle();
-                }
-            }
-        }
-
         public List<Position> GetSurroundingCells(Position cellPos)
         {
 
@@ -217,7 +189,7 @@ namespace Biosim.Simulation
 
                     if (i != 0 || j != 0)
                     {
-                        if (cellPos.x + i >= 0 && cellPos.y +j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
+                        if (cellPos.x + i >= 0 && cellPos.y + j >= 0 && cellPos.x + i < Land.Count() && cellPos.y + j < Land[0].Count())
                         {
                             if (Land[cellPos.x + i][cellPos.y + j].Passable)
                             {
@@ -249,7 +221,7 @@ namespace Biosim.Simulation
                 Land[cellPos.x][cellPos.y].Carnivores.ForEach(i => i.Params = parameters);
             }
 
-            
+
         }
 
         public bool LoadCustomParametersOnAnimal(IAnimal animal, IAnimalParams parameters)
@@ -294,6 +266,8 @@ namespace Biosim.Simulation
         public void OneYear()
         {
             var feedString = $"{CurrentYear}";
+            var popStringHerb = $"{CurrentYear}";
+            var popStringCarn = $"{CurrentYear}";
             for (int i = 0; i < Dimentions.x; i++)
             {
                 for (int j = 0; j < Dimentions.y; j++)
@@ -301,7 +275,7 @@ namespace Biosim.Simulation
                     var cell = Land[i][j];
                     OneCellYearFirstHalf(cell);
                     Migrate(cell);
-                    
+
                 }
             }
 
@@ -315,12 +289,15 @@ namespace Biosim.Simulation
                     OneCellYearSecondHalf(cell);
                     //Save Log info here.
                     feedString += $",{cell.Food}";
+                    popStringHerb += $",{cell.NumberOfHerbivores}";
+                    popStringCarn += $",{cell.NumberOfCarnivores}";
                 }
             }
 
-
+            HerbivorePopulationMap.LogPop(popStringHerb);
+            CarnivorePopulationMap.LogPop(popStringCarn);
             FoodLog.Log(feedString);
-            Logger.Log($"{CurrentYear.ToString().Replace(',','.')},{LiveHerbivores.ToString().Replace(',', '.')},{LiveCarnivores.ToString().Replace(',', '.')},{AverageHerbivoreFitness.ToString().Replace(',', '.')},{AverageCarnivoreFitness.ToString().Replace(',', '.')},{AverageHerbivoreAge.ToString().Replace(',', '.')},{AverageCarnivoreAge.ToString().Replace(',', '.')},{AverageHerbivoreWeight.ToString().Replace(',', '.')},{AverageCarnivoreWeight.ToString().Replace(',', '.')},{HerbivoresBornThisYear.ToString().Replace(',', '.')},{CarnivoresBornThisYear.ToString().Replace(',', '.')}");
+            Logger.Log($"{CurrentYear.ToString().Replace(',', '.')},{LiveHerbivores.ToString().Replace(',', '.')},{LiveCarnivores.ToString().Replace(',', '.')},{AverageHerbivoreFitness.ToString().Replace(',', '.')},{AverageCarnivoreFitness.ToString().Replace(',', '.')},{AverageHerbivoreAge.ToString().Replace(',', '.')},{AverageCarnivoreAge.ToString().Replace(',', '.')},{AverageHerbivoreWeight.ToString().Replace(',', '.')},{AverageCarnivoreWeight.ToString().Replace(',', '.')},{HerbivoresBornThisYear.ToString().Replace(',', '.')},{CarnivoresBornThisYear.ToString().Replace(',', '.')}");
             CurrentYear++;
         }
 
@@ -353,11 +330,6 @@ namespace Biosim.Simulation
             Console.WriteLine("Press enter to close this window");
         }
 
-        public void RemoveDead()
-        {
-            throw new NotImplementedException();
-        }
-
         public void ResetSeasonalParams() // No longer needed
         {
             throw new NotImplementedException();
@@ -376,7 +348,6 @@ namespace Biosim.Simulation
             }
             SaveCSV();
             Plot();
-            FoodLog.LogCSV(); // Remvove or refactor later
             Console.WriteLine($"Simulation finished after {simulated} years");
         }
 
@@ -424,7 +395,8 @@ namespace Biosim.Simulation
                 if (animal.GetType().Name == "Herbivore")
                 {
                     Land[animal.GoingToMoveTo.x][animal.GoingToMoveTo.y].Herbivores.Add((Herbivore)animal);
-                } else
+                }
+                else
                 {
                     Land[animal.GoingToMoveTo.x][animal.GoingToMoveTo.y].Carnivores.Add((Carnivore)animal);
                 }
@@ -444,9 +416,15 @@ namespace Biosim.Simulation
             //TotalDeadHerbivores;
         }
 
+        /// <summary>
+        /// Writes all loggers data to csv files
+        /// </summary>
         public void SaveCSV()
         {
             Logger.LogCSV();
+            FoodLog.LogCSV(); // Remvove or refactor later
+            HerbivorePopulationMap.WriteCSV();
+            CarnivorePopulationMap.WriteCSV();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Biosim.Parameters
         public virtual double F { get; set; }
         public virtual double DeltaPhiMax { get; set; }
 
-        public void OverloadParameters(double bWeight, double bSigma, double beta, double eta, double aHalf, 
+        public void OverloadParameters(double bWeight, double bSigma, double beta, double eta, double aHalf,
             double phiAge, double wHalf, double phiWeight, double mu, double gamma, double zeta,
             double xi, double omega, double f, double deltaPhiMax)
         { // Re-write to use Dictionaries? Enable updating of a single parameter at a time. 
@@ -126,7 +126,7 @@ namespace Biosim.Parameters
 
     }
 
-    public class HerbivoreParams : ParameterBase , IAnimalParams
+    public class HerbivoreParams : ParameterBase, IAnimalParams
     {
         public override double BirthWeight { get; set; } = 4.0;
         public override double BirthSigma { get; set; } = 1.5;

@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Biosim.Animals;
+using Biosim.Parameters;
+using Biosim.Simulation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Biosim.Animals;
-using Biosim.Simulation;
-using Biosim.Land;
-using Biosim.Parameters;
-using System.IO;
 
 namespace Biosim
 {
@@ -31,7 +27,7 @@ namespace Biosim
 
         private static void TryOutSimulationClass()
         {
-            var template = "DDDDD\nDSSSD\nDJJJD\nDSSSD\nDDDDD";
+            var template = "OOOOOOO\nODDJDDO\nODSJSDO\nODJJJDO\nODSSSDO\nODDDDDO\nOOOOOOO";
             int xDim = template.Split('\n')[0].Length;
             int yDim = template.Split('\n').Length;
             var sim = new Sim("../../Results/SimResult.csv", 1500, template);

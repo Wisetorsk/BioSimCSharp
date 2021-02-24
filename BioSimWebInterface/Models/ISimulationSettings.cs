@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BioSimWebInterface.Models
+﻿namespace BioSimWebInterface.Models
 {
     interface ISimulationSettings
     {
